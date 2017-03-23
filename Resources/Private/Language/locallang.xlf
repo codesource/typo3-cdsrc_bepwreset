@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2015-01-11T17:54:12Z" product-name="lang">
+		<header/>
+		<body>
+			<trans-unit id="headline.reset" xml:space="preserve">
+				<source>Reset password form</source>
+			</trans-unit>
+			<trans-unit id="labels.backToLogin" xml:space="preserve">
+				<source>Back to login form</source>
+			</trans-unit>
+			<trans-unit id="labels.changePasswordAtFirstLogin" xml:space="preserve">
+				<source>Your password must be updated.</source>
+			</trans-unit>
+			<trans-unit id="labels.password_confirmation" xml:space="preserve">
+				<source>Password confirmation</source>
+			</trans-unit>
+			<trans-unit id="labels.reset" xml:space="preserve">
+				<source>Save password</source>
+			</trans-unit>
+			<trans-unit id="labels.reset.process" xml:space="preserve">
+				<source>Saving password ...</source>
+			</trans-unit>
+			<trans-unit id="labels.resetpw" xml:space="preserve">
+				<source>Send reset code</source>
+			</trans-unit>
+			<trans-unit id="labels.switchToReset" xml:space="preserve">
+				<source>Switch to password reset</source>
+			</trans-unit>
+			<trans-unit id="labels.passwordForgotten" xml:space="preserve">
+				<source>Password forgotten?</source>
+			</trans-unit>
+			<trans-unit id="labels.requestPasswordChange" xml:space="preserve">
+				<source>Request a password change</source>
+			</trans-unit>
+			<trans-unit id="ok.sendCode" xml:space="preserve">
+				<source>Reset code sent</source>
+			</trans-unit>
+			<trans-unit id="ok.sendCodeMessage" xml:space="preserve">
+				<source>A confirmation has been send to your address email. Click on link to finish password reset.</source>
+			</trans-unit>
+			<trans-unit id="ok.resetPassword" xml:space="preserve">
+				<source>Your password has been changed</source>
+			</trans-unit>
+			<trans-unit id="ok.resetPasswordMessage" xml:space="preserve">
+				<source>You can login with your new password.</source>
+			</trans-unit>
+			<trans-unit id="requestNewPassword.subject" xml:space="preserve">
+				<source>[%s] Password reset request</source>
+			</trans-unit>
+			<trans-unit id="warning.resetPassword" xml:space="preserve">
+				<source>An error happend during reset processing</source>
+			</trans-unit>
+			<trans-unit id="warning.resetPassword.userDoNotExists" xml:space="preserve">
+				<source>Given username is invalid, please try again.</source>
+			</trans-unit>
+			<trans-unit id="warning.resetPassword.invalidUserEmail" xml:space="preserve">
+				<source>User's email address is invalid, please contact an administrator</source>
+			</trans-unit>
+			<trans-unit id="warning.resetPassword.userHasNoEmail" xml:space="preserve">
+				<source>User has no email address defined, please contact an administrator</source>
+			</trans-unit>
+			<trans-unit id="warning.resetPassword.invalidResetCode" xml:space="preserve">
+				<source>Given reset code is invalid.</source>
+			</trans-unit>
+			<trans-unit id="warning.resetPassword.unknown" xml:space="preserve">
+				<source>An error happend, please contact an administrator.</source>
+			</trans-unit>
+			<trans-unit id="warning.resetPassword.emailNotSent" xml:space="preserve">
+				<source>The email has not been sent, please contact an administrator.</source>
+			</trans-unit>
+			<trans-unit id="warning.resetPassword.emptyPassword" xml:space="preserve">
+				<source>Password is empty.</source>
+			</trans-unit>
+			<trans-unit id="warning.resetPassword.invalidPasswordConfirmation" xml:space="preserve">
+				<source>The password confirmation is not equals to given password.</source>
+			</trans-unit>
+			<trans-unit id="warning.resetPassword.beSecurePw" xml:space="preserve">
+				<source>Attempt to modify password. Some password conventions were ignored.</source>
+			</trans-unit>
+			<trans-unit id="warning.resetPassword.passwordResetPreventedForAdmin" xml:space="preserve">
+				<source>Password reset is prevented for administrators.</source>
+			</trans-unit>
+			<trans-unit id="warning.resetPassword.userIsInBlackList" xml:space="preserve">
+				<source>This user is not allowed to reset is password.</source>
+			</trans-unit>
+			<trans-unit id="warning.resetPassword.userIsNotInBlackList" xml:space="preserve">
+				<source>This user is not allowed to reset is password.</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

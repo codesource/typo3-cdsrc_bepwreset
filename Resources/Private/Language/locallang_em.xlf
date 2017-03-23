@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" date="2015-01-11T17:54:12Z" product-name="lang">
+        <header/>
+        <body>
+            <trans-unit id="enablePasswordResetFromLoginForm" xml:space="preserve">
+                <source>Enable password reset from Login Form</source>
+            </trans-unit>
+            <trans-unit id="enablePasswordResetForAdmin" xml:space="preserve">
+                <source>Enable password reset for Administrators</source>
+            </trans-unit>
+            <trans-unit id="backendGroupWhiteList" xml:space="preserve">
+                <source>Backend Group White List: Only this groups can reset password. If none selected white list is ignored</source>
+            </trans-unit>
+            <trans-unit id="backendGroupBlackList" xml:space="preserve">
+                <source>Backend Group Black List: Prevent reset password for this groups. If none selected black list is ignored. (this take priority on white list)</source>
+            </trans-unit>
+            <trans-unit id="bypassCheckOnResetAtNextLogin" xml:space="preserve">
+                <source>Bypass Administrators, white list and black list: If this option is not checked and user do not pass validation, no password change will be forced at next login</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

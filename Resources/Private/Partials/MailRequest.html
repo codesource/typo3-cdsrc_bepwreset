@@ -1,0 +1,35 @@
+<f:section name="Subject">
+    <f:translate key="requestNewPassword.subject" extensionName="CdsrcBepwreset" arguments="{0:siteName}"/>
+</f:section>
+
+<f:section name="Html">
+    <p>
+        <f:if condition="{user.realName}">
+            <f:then>
+                Hi {user.realName},<br/>
+            </f:then>
+            <f:else>
+                Hi,<br/>
+            </f:else>
+        </f:if>
+        <br/>
+        Password reset has been requested for user "{user.username}".<br/>
+        Please click on this <a href="{url}">link</a> if you did this request (valid until {validity -> f:format.date(format:'d.m.Y H:i')}).<br/>
+        <br/>
+        If you did not send this request, please ignore this email.<br/>
+        <br/>
+        Kind regards
+    </p>
+</f:section>
+
+<f:section name="Plain">
+Hi{f:if(condition:user.realName, then:' {user.realName}')},
+
+Password reset has been requested for user "{user.username}".
+Please click on this link if you did this request (valid until {validity -> f:format.date(format:'d.m.Y H:i')})
+{url -> f:format.raw()}
+
+If you did not send this request, please ignore this email.
+
+Kind regards
+</f:section>
