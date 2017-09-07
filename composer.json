@@ -1,0 +1,25 @@
+{
+  "name": "typo3-ter/cdsrc-bepwreset",
+  "type": "typo3-cms-extension",
+  "description": "Allow backend user to reset his password from login form. Option can be specified to force Backend user to change his password at first login.",
+  "authors": [
+    {
+      "name": "Matthias Toscanelli",
+      "email": "m.toscanelli@code-source.ch",
+      "company": "Code-Source",
+      "username": "mtoscanelli"
+    }
+  ],
+  "require": {
+    "typo3/cms-core": ">= 7.6.0, <= 8.7.99"
+  },
+  "autoload": {
+    "psr-4": {
+      "CDSRC\\CdsrcBepwreset\\": "Classes"
+    }
+  },
+  "replace": {
+    "cdsrc_bepwreset": "self.version",
+    "typo3-ter/cdsrc_bepwreset": "self.version"
+  }
+}
