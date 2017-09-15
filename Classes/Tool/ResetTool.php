@@ -33,11 +33,11 @@ use CDSRC\CdsrcBepwreset\Utility\HashUtility;
 use CDSRC\CdsrcBepwreset\Utility\LogUtility;
 use CDSRC\CdsrcBepwreset\View\MailStandaloneView;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  *
@@ -294,7 +294,20 @@ class ResetTool
         if (strlen($username) === 0) {
             throw new InvalidUsernameException('Username is empty.', 1424708826);
         }
-        $users = BackendUtility::getRecordsByField('be_users', 'username', $username);
+        if (class_exists(ConnectionPool::class)) {
+            /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
+            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('be_users');
+            $users = $queryBuilder->select('*')
+                                  ->from('be_users')
+                                  ->where($queryBuilder->expr()->eq(
+                                      'username',
+                                      $queryBuilder->createNamedParameter($username, \PDO::PARAM_STR)
+                                  ))
+                                  ->execute()
+                                  ->fetchAll();
+        } else {
+            $users = BackendUtility::getRecordsByField('be_users', 'username', $username);
+        }
         $count = count($users);
         if ($count === 0) {
             throw new InvalidBackendUserException('User do not exists.', 1424709938);
