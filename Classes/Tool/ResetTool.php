@@ -219,9 +219,9 @@ class ResetTool
         // Make instance of TCE for storing the changes.
         $tce = GeneralUtility::makeInstance(DataHandler::class);
         $tce->stripslashes_values = 0;
-        $tce->start($storeRec, array(), $GLOBALS['BE_USER']);
         // This is so the user can actually update his user record.
-        $tce->admin = 1;
+        $GLOBALS['BE_USER']->user['admin'] = 1;
+        $tce->start($storeRec, array(), $GLOBALS['BE_USER']);
         // Desactivate history
         $tce->checkSimilar = false;
         // This is to make sure that the users record can be updated even if in another workspace. This is tolerated.
