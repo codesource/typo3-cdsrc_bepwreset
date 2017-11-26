@@ -25,6 +25,7 @@ use TYPO3\CMS\Backend\Controller\LoginController;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class UsernamePasswordLoginProvider extends \TYPO3\CMS\Backend\LoginProvider\UsernamePasswordLoginProvider
@@ -248,6 +249,8 @@ class UsernamePasswordLoginProvider extends \TYPO3\CMS\Backend\LoginProvider\Use
             return $GLOBALS['LANG']->getLL('warning.resetPassword.beSecurePw');
         } elseif ($e instanceof EmailNotSentException) {
             return $GLOBALS['LANG']->getLL('warning.resetPassword.emailNotSent');
+        } elseif ($e instanceof InvalidTemplateResourceException){
+            return $e->getMessage();
         } else {
             return $GLOBALS['LANG']->getLL('warning.resetPassword.unknown');
         }

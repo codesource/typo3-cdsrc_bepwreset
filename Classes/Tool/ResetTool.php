@@ -90,8 +90,6 @@ class ResetTool
         $view = GeneralUtility::makeInstance(MailStandaloneView::class);
         $view->setPartialRootPaths([GeneralUtility::getFileAbsFileName('EXT:cdsrc_bepwreset/Resources/Private/Partials')]);
 
-        //TODO: Add a hook to allow template redefine
-
         $hash = HashUtility::getHash($this->user['username'], $fields['tx_cdsrcbepwreset_resetHash']);
         $variables = [
             'user' => $this->user,
@@ -104,6 +102,16 @@ class ResetTool
             ),
             'siteName' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'],
         ];
+
+        if(is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cdsrc_bepwreset']['CDSRC\CdsrcBepwreset\Tool\ResetTool']['preRenderMail'])) {
+            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cdsrc_bepwreset']['CDSRC\CdsrcBepwreset\Tool\ResetTool']['preRenderMail'] as $reference) {
+                $hookParameters = [
+                    'variables' => &$variables,
+                    'view' => &$view,
+                ];
+                GeneralUtility::callUserFunction($reference, $hookParameters, $this);
+            }
+        }
 
         $subject = trim($view->renderPartial('MailRequest.html', 'Subject', $variables));
         $bodyHtml = $view->renderPartial('MailRequest.html', 'Html', $variables);

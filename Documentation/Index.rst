@@ -31,7 +31,7 @@ BE User Password Reset
 		forAdministrators
 
 	:Copyright:
-		2015
+		2015-2017
 
 	:Author:
 		Matthias Toscanelli
@@ -53,13 +53,15 @@ BE User Password Reset
 	**Table of Contents**
 
 .. toctree::
-	:maxdepth: 5
+	:maxdepth: 3
 	:titlesonly:
-	:glob:
+    :glob:
 
-	Introduction/Index
-	Installation/Index
-	ConfigurationManual/Index
-	AdministratorManual/Index
-	FAQ/Index
-	KnownProblems/Index
+    Introduction/Index
+    Installation/Index
+    ConfigurationManual/Index
+    AdministratorManual/Index
+    DeveloperManual/Index
+    FAQ/Index
+    KnownProblems/Index
+

@@ -5,6 +5,6 @@ enablePasswordResetForAdmin = 0
 # cat=Basic/enable; type=user[CDSRC\CdsrcBepwreset\Utility\ExtensionManagerConfigurationUtility->renderBackendGroupSelect]; label=LLL:EXT:cdsrc_bepwreset/Resources/Private/Language/locallang_em.xlf:backendGroupWhiteList
 backendGroupsWhiteList = 
 # cat=Basic/enable; type=user[CDSRC\CdsrcBepwreset\Utility\ExtensionManagerConfigurationUtility->renderBackendGroupSelect]; label=LLL:EXT:cdsrc_bepwreset/Resources/Private/Language/locallang_em.xlf:backendGroupBlackList
-backendGroupsBlackList = 
+backendGroupsBlackList =
 # cat=Basic/enable; type=boolean; label=LLL:EXT:cdsrc_bepwreset/Resources/Private/Language/locallang_em.xlf:bypassCheckOnResetAtNextLogin
 bypassCheckOnResetAtNextLogin = 0
