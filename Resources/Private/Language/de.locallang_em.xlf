@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2015-01-11T17:54:12Z">
+		<header>
+			<generator>LFEditor</generator>
+		</header>
+		<body>
+		<trans-unit id="backendGroupBlackList" approved="yes">
+			<source>Backend Group Black List: Prevent reset password for this groups. If none selected black list is ignored. (this take priority on white list)</source>
+			<target>Backend Group Black List: Verhindert für Mitglieder dieser Gruppe das Zurücksetzen des Passworts. (dies hat Priorität vor der Whitelist)</target>
+		</trans-unit>
+		<trans-unit id="backendGroupWhiteList" approved="yes">
+			<source>Backend Group White List: Only this groups can reset password. If none selected white list is ignored</source>
+			<target>Backend Group White List: Nur Mitglieder dieser Gruppe dürfen ihr Passwort zurücksetzen. Ist kein Eintrag ausgewählt wird die Liste ignoriert</target>
+		</trans-unit>
+		<trans-unit id="bypassCheckOnResetAtNextLogin" approved="yes">
+			<source>Bypass Administrators, white list and black list: If this option is not checked and user do not pass validation, no password change will be forced at next login</source>
+			<target>Administratoren, Whitelist und Backlist umgehen: Ist diese Option ausgewählt und der Benutzer beendet den Wiederherstellungsprozess nicht, wird er nicht gezwungen sein Passwort beim nächsten Login zurückzusetzen.</target>
+		</trans-unit>
+		<trans-unit id="enablePasswordResetForAdmin" approved="yes">
+			<source>Enable password reset for Administrators</source>
+			<target>Ermöglicht das Zurücksetzen des Passworts für Administratoren</target>
+		</trans-unit>
+		<trans-unit id="enablePasswordResetFromLoginForm" approved="yes">
+			<source>Enable password reset from Login Form</source>
+			<target>Ermöglicht das Zurücksetzen des Passworts im Login Formular</target>
+		</trans-unit>
+		</body>
+	</file>
+</xliff>
