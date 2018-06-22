@@ -267,13 +267,14 @@ class ResetTool
     protected function updateResetCode()
     {
         if (!empty($this->user)) {
-            $fields = array(
-                'tstamp' => $GLOBALS['EXEC_TIME'],
-                'tx_cdsrcbepwreset_resetHash' => md5($GLOBALS['EXEC_TIME'] . '-' . mt_rand(1000, 100000)),
-                'tx_cdsrcbepwreset_resetHashValidity' => $GLOBALS['EXEC_TIME'] + 3600,
-            );
-
-            if ($GLOBALS['TYPO3_DB']->exec_UPDATEquery('be_users', 'uid=' . intval($this->user['uid']), $fields)) {
+            /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
+            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('be_users');
+            $updateQuery = $queryBuilder->update('be_users')
+                                ->where($queryBuilder->expr()->eq('uid',intval($this->user['uid'])))
+                                ->set('tstamp',$GLOBALS['EXEC_TIME'])
+                                ->set('tx_cdsrcbepwreset_resetHash',md5($GLOBALS['EXEC_TIME'] . '-' . mt_rand(1000, 100000)))
+                                ->set('tx_cdsrcbepwreset_resetHashValidity',$GLOBALS['EXEC_TIME'] + 3600);
+            if ($updateQuery->execute()) {
                 return $fields;
             }
         }
