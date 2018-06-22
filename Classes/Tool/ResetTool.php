@@ -270,10 +270,10 @@ class ResetTool
             /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
             $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('be_users');
             $updateQuery = $queryBuilder->update('be_users')
-                                ->where($queryBuilder->expr()->eq('uid',intval($this->user['uid'])))
-                                ->set('tstamp',$GLOBALS['EXEC_TIME'])
-                                ->set('tx_cdsrcbepwreset_resetHash',md5($GLOBALS['EXEC_TIME'] . '-' . mt_rand(1000, 100000)))
-                                ->set('tx_cdsrcbepwreset_resetHashValidity',$GLOBALS['EXEC_TIME'] + 3600);
+                                ->where($queryBuilder->expr()->eq('uid',$queryBuilder->createNamedParameter(intval($this->user['uid'],\PDO::PARAM_INT))))
+                                ->set('tstamp',$queryBuilder->createNamedParameter($EXEC_TIME,\PDO::PARAM_INT))
+                                ->set('tx_cdsrcbepwreset_resetHash',$queryBuilder->createNamedParameter(md5((String)$EXEC_TIME . '-' . mt_rand(1000, 100000),\PDO::PARAM_STR)))
+                                ->set('tx_cdsrcbepwreset_resetHashValidity',$queryBuilder->createNamedParameter(($EXEC_TIME + 3600),\PDO:PARAM_INT));
             if ($updateQuery->execute()) {
                 return $fields;
             }
