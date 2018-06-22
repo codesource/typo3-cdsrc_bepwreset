@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2015-01-11T17:54:12Z">
+		<header>
+			<generator>LFEditor</generator>
+		</header>
+		<body>
+		<trans-unit id="headline.reset" approved="yes">
+			<source>Reset password form</source>
+			<target>Password zurücksetzen Formular</target>
+		</trans-unit>
+		<trans-unit id="labels.backToLogin" approved="yes">
+			<source>Back to login form</source>
+			<target>Zurück zum Login</target>
+		</trans-unit>
+		<trans-unit id="labels.changePasswordAtFirstLogin" approved="yes">
+			<source>Your password must be updated.</source>
+			<target>Ihr Passwort muss aktualisiert werden</target>
+		</trans-unit>
+		<trans-unit id="labels.passwordForgotten" approved="yes">
+			<source>Password forgotten?</source>
+			<target>Passwort vergessen?</target>
+		</trans-unit>
+		<trans-unit id="labels.password_confirmation" approved="yes">
+			<source>Password confirmation</source>
+			<target>Passwort Bestätigung</target>
+		</trans-unit>
+		<trans-unit id="labels.requestPasswordChange" approved="yes">
+			<source>Request a password change</source>
+			<target>Passwortänderung anfordern</target>
+		</trans-unit>
+		<trans-unit id="labels.reset" approved="yes">
+			<source>Save password</source>
+			<target>Passwort speichern</target>
+		</trans-unit>
+		<trans-unit id="labels.reset.process" approved="yes">
+			<source>Saving password ...</source>
+			<target>Speichere Passwort ...</target>
+		</trans-unit>
+		<trans-unit id="labels.resetpw" approved="yes">
+			<source>Send reset code</source>
+			<target>Passwort zurücksetzen Code zusenden</target>
+		</trans-unit>
+		<trans-unit id="labels.switchToReset" approved="yes">
+			<source>Switch to password reset</source>
+			<target>Zu Passwort zurücksetzen wechseln</target>
+		</trans-unit>
+		<trans-unit id="ok.resetPassword" approved="yes">
+			<source>Your password has been changed</source>
+			<target>Ihr Passwort wurde geändert</target>
+		</trans-unit>
+		<trans-unit id="ok.resetPasswordMessage" approved="yes">
+			<source>You can login with your new password.</source>
+			<target>Sie können sich nun mit dem neuen Passwort anmelden</target>
+		</trans-unit>
+		<trans-unit id="ok.sendCode" approved="yes">
+			<source>Reset code sent</source>
+			<target>Code zum Zurücksetzen wurde gesendet</target>
+		</trans-unit>
+		<trans-unit id="ok.sendCodeMessage" approved="yes">
+			<source>A confirmation has been send to your address email. Click on link to finish password reset.</source>
+			<target>Eine Bestätigung wurde an Ihre E-Mail Adresse geesendet. Klicken Sie den Link um den Vorgang abzuschliessen.</target>
+		</trans-unit>
+		<trans-unit id="requestNewPassword.subject" approved="yes">
+			<source>[%s] Password reset request</source>
+			<target>[%s] Passwort Änderung Anfrage</target>
+		</trans-unit>
+		<trans-unit id="warning.resetPassword" approved="yes">
+			<source>An error happend during reset processing</source>
+			<target>Ein Fehler ist während dem Zurücksetzen aufgetreten</target>
+		</trans-unit>
+		<trans-unit id="warning.resetPassword.invalidResetCode" approved="yes">
+			<source>Given reset code is invalid.</source>
+			<target>Der Zurücksetzen Code ist ungültig.</target>
+		</trans-unit>
+		<trans-unit id="warning.resetPassword.invalidUserEmail" approved="yes">
+			<source>User's email address is invalid, please contact an administrator</source>
+			<target>Die E-Mail Adresse des Benutzers ist ungültig. Bitte kontaktieren Sie einen Administrator</target>
+		</trans-unit>
+		<trans-unit id="warning.resetPassword.userDoNotExists" approved="yes">
+			<source>Given username is invalid, please try again.</source>
+			<target>Der gewählte Benutzername ist ungültig.</target>
+		</trans-unit>
+		<trans-unit id="warning.resetPassword.userHasNoEmail" approved="yes">
+			<source>User has no email address defined, please contact an administrator</source>
+			<target>Der Benutzer hat keine E-Mail Adresse hinterlegt. Bitte kontaktieren Sie einen Administrator</target>
+		</trans-unit>
+		<trans-unit id="warning.resetPassword.userIsInBlackList" approved="yes">
+			<source>This user is not allowed to reset his password.</source>
+			<target>Dieser Benutzer ist nicht berechtigt sein Passwort zurückzusetzen.</target>
+		</trans-unit>
+		<trans-unit id="warning.resetPassword.userIsNotInBlackList" approved="yes">
+			<source>This user is not allowed to reset his password.</source>
+			<target>Dieser Benutzer ist nicht berechtigt sein Passwort zurückzusetzen.</target>
+		</trans-unit>
+		</body>
+	</file>
+</xliff>
