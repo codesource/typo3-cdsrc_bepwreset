@@ -203,6 +203,16 @@ class ResetTool
                 throw new BeSecurePwException('Password is not enough strong.', 1424736449);
             }
         }
+
+        if(is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cdsrc_bepwreset']['CDSRC\CdsrcBepwreset\Tool\ResetTool']['preResetPassword'])) {
+            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cdsrc_bepwreset']['CDSRC\CdsrcBepwreset\Tool\ResetTool']['preResetPassword'] as $reference) {
+                $hookParameters = [
+                    'password' => $trimedPassword,
+                ];
+                GeneralUtility::callUserFunction($reference, $hookParameters, $this);
+            }
+        }
+
         if (!is_object($GLOBALS['BE_USER'])) {
             throw new BackendUserNotInitializedException('Backend user object is not initialized.', 1424720202);
         }
