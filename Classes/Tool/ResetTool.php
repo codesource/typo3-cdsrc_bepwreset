@@ -272,7 +272,7 @@ class ResetTool
             $namedParameterUid = $queryBuilder->createNamedParameter(intval($this->user['uid']),\PDO::PARAM_INT);
             $hash = md5((String)$EXEC_TIME . '-' . mt_rand(1000, 100000));
             $namedParameterHash = $queryBuilder->createNamedParameter($hash,\PDO::PARAM_STR);
-            $namedParameterHashValidity = $queryBuilder->createNamedParameter(($EXEC_TIME + 3600),\PDO:PARAM_INT);
+            $namedParameterHashValidity = $queryBuilder->createNamedParameter(($EXEC_TIME + 3600),\PDO::PARAM_INT);
             $updateQuery = $queryBuilder->update('be_users')
                                 ->where($queryBuilder->expr()->eq('uid',$namedParameterUid))
                                 ->set('tstamp',$queryBuilder->createNamedParameter($EXEC_TIME,\PDO::PARAM_INT))
