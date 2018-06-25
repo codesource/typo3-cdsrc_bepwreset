@@ -6,32 +6,30 @@
     <p>
         <f:if condition="{user.realName}">
             <f:then>
-                Hallo {user.realName},<br/>
+                Hi {user.realName},<br/>
             </f:then>
             <f:else>
-                Hallo,<br/>
+                Hi,<br/>
             </f:else>
         </f:if>
         <br/>
-        Sie haben für Ihren Benutzer "{user.username}" ein neues Passwort angefordert.<br/>
-        Um den Prozess abzuschließen, klicken Sie bitte auf folgenden <a href="{url}">Link</a>.
-        <br />Dieser Link ist gültig bis zum {validity -> f:format.date(format:'d.m.Y H:i')} Uhr.<br/>
+        Password reset has been requested for user "{user.username}".<br/>
+        Please click on this <a href="{url}">link</a> if you did this request (valid until {validity -> f:format.date(format:'d.m.Y H:i')}).<br/>
         <br/>
-        Sollten Sie kein neues Passwort angefordert haben, so ignorieren Sie bitte diese E-Mail.<br/>
+        If you did not send this request, please ignore this email.<br/>
         <br/>
-        Mit freundlichen Grüßen
+        Kind regards
     </p>
 </f:section>
 
 <f:section name="Plain">
-Hallo {f:if(condition:user.realName, then:' {user.realName}')},
+Hi{f:if(condition:user.realName, then:' {user.realName}')},
 
-Sie haben für Ihren Benutzer "{user.username}" ein neues Passwort angefordert.
+Password reset has been requested for user "{user.username}".
+Please click on this link if you did this request (valid until {validity -> f:format.date(format:'d.m.Y H:i')})
+{url -> f:format.raw()}
 
-Um den Prozess abzuschließen, klicken Sie bitte auf folgenden Link: {url -> f:format.raw()}
-Dieser Link ist gültig bis zum {validity -> f:format.date(format:'d.m.Y H:i')} Uhr.
+If you did not send this request, please ignore this email.
 
-Sollten Sie kein neues Passwort angefordert haben, so ignorieren Sie bitte diese E-Mail.
-
-Mit freundlichen Grüßen
+Kind regards
 </f:section>
