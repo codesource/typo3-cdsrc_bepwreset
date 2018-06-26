@@ -78,7 +78,7 @@ class LogUtility {
 		$queryBuilder = $objectManager->get(ConnectionPool::class)->getQueryBuilderForTable('sys_log');
 		/** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
 		$objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-		/** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
+		/** @var \TYPO3\CMS\Core\Database\Connection $connection */
 		$connection = $objectManager->get(ConnectionPool::class)->getConnectionForTable('sys_log');
 		$connection->insert('sys_log')
 					->values(array(
