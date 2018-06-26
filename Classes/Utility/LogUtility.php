@@ -75,7 +75,7 @@ class LogUtility {
         /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
 		$objectManager = GeneralUtility::makeInstance(ObjectManager::class);
 		/** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
-		$queryBuilder = $objectManager->get(ConnectionPool::class)->getQueryBuilderForTable('be_users');
+		$queryBuilder = $objectManager->get(ConnectionPool::class)->getQueryBuilderForTable('sys_log');
 		return $queryBuilder->insert('sys_log')
 					->values(array(
 						'userid' => (int) $userId,
