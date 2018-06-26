@@ -76,7 +76,11 @@ class LogUtility {
 		$objectManager = GeneralUtility::makeInstance(ObjectManager::class);
 		/** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
 		$queryBuilder = $objectManager->get(ConnectionPool::class)->getQueryBuilderForTable('sys_log');
-		return $queryBuilder->insert('sys_log')
+		/** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
+		$objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+		/** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
+		$connection = $objectManager->get(ConnectionPool::class)->getConnectionForTable('sys_log');
+		$connection->insert('sys_log')
 					->values(array(
 						'userid' => (int) $userId,
 						'type' => (int) $type,
@@ -91,5 +95,5 @@ class LogUtility {
 						'event_pid' => -1,
 						'workspace' => '-99'
 					))->execute();
-        );
+        	return $connection->lastInsertId('sys_log');
 }
