@@ -68,6 +68,8 @@ class ExtensionConfigurationUtility
      * Check if user is in WhiteList Groups
      *
      * @param array $user
+     *
+     * @return bool
      */
     public static function isUserInWhiteList($user)
     {
@@ -85,6 +87,8 @@ class ExtensionConfigurationUtility
      * Check if user is in WhiteList Groups
      *
      * @param array $user
+     *
+     * @return bool
      */
     public static function isUserInBlackList($user)
     {

@@ -14,24 +14,28 @@ namespace CDSRC\CdsrcBepwreset\Utility;
  *
  * The TYPO3 project - inspiring people to share!
  */
+use TYPO3\CMS\Core\Database\Connection;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * Log message tool
  *
  * @author Matthias Toscanelli <m.toscanelli@code-source.ch>
  */
-class LogUtility {
+class LogUtility
+{
 
     /**
      * Extention key
-     * 
+     *
      * @var string
      */
     protected static $extKey = 'cdsrc_bepwreset';
 
     /**
-     * Writes log message to the system log. 
+     * Writes log message to the system log.
      * If developer log is enabled, messages are also sent there.
      *
      * This function accepts variable number of arguments and can format
@@ -39,10 +43,12 @@ class LogUtility {
      *
      * @param string $message Message to output
      * @param integer $userId Backend user UID
+     *
      * @return void
      * @see GeneralUtility::sysLog()
      */
-    public static function writeLog($message, $userId = 0) {
+    public static function writeLog($message, $userId = 0)
+    {
         if (func_num_args() > 2) {
             $params = func_get_args();
             array_shift($params);
@@ -62,33 +68,36 @@ class LogUtility {
 
     /**
      * Write to database sys_log
-     * 
+     *
      * @param string $message
      * @param integer $userId
      * @param integer $type
      * @param integer $action
      * @param integer $error
-     * 
+     *
      * @return integer
      */
-    protected static function writeToSysLog($message, $userId = 0, $type = 255, $action = 0, $error = 0) {
-        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */	
-	$objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-	/** @var \TYPO3\CMS\Core\Database\Connection $connection */
-	$connection = $objectManager->get(ConnectionPool::class)->getConnectionForTable('sys_log');
-	$connection->insert('sys_log')->values(array(
-		'userid' => (int) $userId,
-		'type' => (int) $type,
-		'action' => (int) $action,
-		'error' => (int) $error,
-		'details_nr' => 1,
-		'details' => $message,
-		'log_data' => serialize(array()),
-		'tablename' => '',
-		'IP' => (string) GeneralUtility::getIndpEnv('REMOTE_ADDR'),
-		'tstamp' => $GLOBALS['EXEC_TIME'],
-		'event_pid' => -1,
-		'workspace' => '-99'
-	))->execute();
+    protected static function writeToSysLog($message, $userId = 0, $type = 255, $action = 0, $error = 0)
+    {
+        /** @var ObjectManager $objectManager */
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        /** @var Connection $connection */
+        $connection = $objectManager->get(ConnectionPool::class)->getConnectionForTable('sys_log');
+        $connection->insert('sys_log', [
+            'userid' => (int)$userId,
+            'type' => (int)$type,
+            'action' => (int)$action,
+            'error' => (int)$error,
+            'details_nr' => 1,
+            'details' => $message,
+            'log_data' => serialize(array()),
+            'tablename' => '',
+            'IP' => (string)GeneralUtility::getIndpEnv('REMOTE_ADDR'),
+            'tstamp' => $GLOBALS['EXEC_TIME'],
+            'event_pid' => -1,
+            'workspace' => '-99',
+        ]);
+
         return $connection->lastInsertId('sys_log');
+    }
 }

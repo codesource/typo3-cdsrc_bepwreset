@@ -38,6 +38,7 @@ use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\MailUtility;
 
 /**
  *
@@ -103,7 +104,7 @@ class ResetTool
             'siteName' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'],
         ];
 
-        if(is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cdsrc_bepwreset']['CDSRC\CdsrcBepwreset\Tool\ResetTool']['preRenderMail'])) {
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cdsrc_bepwreset']['CDSRC\CdsrcBepwreset\Tool\ResetTool']['preRenderMail'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cdsrc_bepwreset']['CDSRC\CdsrcBepwreset\Tool\ResetTool']['preRenderMail'] as $reference) {
                 $hookParameters = [
                     'variables' => &$variables,
@@ -116,7 +117,7 @@ class ResetTool
         $subject = trim($view->renderPartial('MailRequest.html', 'Subject', $variables));
         $bodyHtml = $view->renderPartial('MailRequest.html', 'Html', $variables);
         $bodyPlain = $view->renderPartial('MailRequest.html', 'Plain', $variables);
-        $from = \TYPO3\CMS\Core\Utility\MailUtility::getSystemFrom();
+        $from = MailUtility::getSystemFrom();
 
         /** @var $mail \TYPO3\CMS\Core\Mail\MailMessage */
         $mail = GeneralUtility::makeInstance(MailMessage::class);
@@ -204,7 +205,7 @@ class ResetTool
             }
         }
 
-        if(is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cdsrc_bepwreset']['CDSRC\CdsrcBepwreset\Tool\ResetTool']['preResetPassword'])) {
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cdsrc_bepwreset']['CDSRC\CdsrcBepwreset\Tool\ResetTool']['preResetPassword'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cdsrc_bepwreset']['CDSRC\CdsrcBepwreset\Tool\ResetTool']['preResetPassword'] as $reference) {
                 $hookParameters = [
                     'password' => $trimedPassword,
@@ -279,19 +280,24 @@ class ResetTool
         if (!empty($this->user)) {
             /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
             $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('be_users');
-            $namedParameterUid = $queryBuilder->createNamedParameter(intval($this->user['uid']),\PDO::PARAM_INT);
-            $hash = md5((String)$EXEC_TIME . '-' . mt_rand(1000, 100000));
-            $namedParameterHash = $queryBuilder->createNamedParameter($hash,\PDO::PARAM_STR);
-            $namedParameterHashValidity = $queryBuilder->createNamedParameter(($EXEC_TIME + 3600),\PDO::PARAM_INT);
+            $tstamp = $GLOBALS['EXEC_TIME'];
+            $hash = md5($tstamp . '-' . mt_rand(1000, 100000));
+            $hashValidity = $tstamp + 3600;
             $updateQuery = $queryBuilder->update('be_users')
-                                ->where($queryBuilder->expr()->eq('uid',$namedParameterUid))
-                                ->set('tstamp',$queryBuilder->createNamedParameter($EXEC_TIME,\PDO::PARAM_INT))
-                                ->set('tx_cdsrcbepwreset_resetHash',$namedParameterHash)
-                                ->set('tx_cdsrcbepwreset_resetHashValidity',$namedParameterHashValidity);
+                                        ->where($queryBuilder->expr()->eq('uid', intval($this->user['uid'])))
+                                        ->set('tstamp', $tstamp, true)
+                                        ->set('tx_cdsrcbepwreset_resetHash', $hash, true)
+                                        ->set('tx_cdsrcbepwreset_resetHashValidity', $hashValidity, true);
+
             if ($updateQuery->execute()) {
-                return $fields;
+                return [
+                    'tstamp' => $tstamp,
+                    'tx_cdsrcbepwreset_resetHash' => $hash,
+                    'tx_cdsrcbepwreset_resetHashValidity' => $hashValidity,
+                ];
             }
         }
+
         return false;
     }
 

@@ -120,10 +120,11 @@ class SessionUtility
 
     /**
      * Initialize session if needed
+     *
+     * @param bool $renew
      */
     protected static function init($renew = false)
     {
-//        var_dump(session_id());exit;
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }

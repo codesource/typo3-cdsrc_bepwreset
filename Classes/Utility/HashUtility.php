@@ -16,8 +16,8 @@ namespace CDSRC\CdsrcBepwreset\Utility;
  *
  */
 
-use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -33,6 +33,8 @@ class HashUtility
      *
      * @param string $username
      * @param string $code
+     *
+     * @return string
      */
     public static function getHash($username, $code)
     {
@@ -48,21 +50,22 @@ class HashUtility
      */
     public static function getUser($hash)
     {
-        if (class_exists(ConnectionPool::class)) {
-            /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
-            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('be_users');
-            $users = $queryBuilder->select('*')
-                                   ->from('be_users')
-                                   ->where($queryBuilder->expr()
-                                        ->eq($this::getHash('be_users.username','be_users.tx_cdsrcbepwreset_resetHash'),
-                                                $queryBuilder->createNamedParameter($hash,\PDO::PARAM_STR))
-                                   )->execute()
-                                   ->fetchAll();
-        } else {
-            $users = BackendUtility::getRecordsByField('be_users', 'deleted', 0, ' AND ' . $whereClause);
-        }
-        if (is_array($users) && count($users) === 1) {
-            return $users[0];
+        /** @var QueryBuilder $queryBuilder */
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('be_users');
+        // Search in PHP for the user with a validity code equals to hash
+        $users = $queryBuilder->select('username', 'tx_cdsrcbepwreset_resetHash')
+                              ->from('be_users')
+                              ->where('tx_cdsrcbepwreset_resetHashValidity >= :validity')
+                              ->setParameter(':validity', $GLOBALS['EXEC_TIME'])
+                              ->execute()
+                              ->fetchAll();
+        if (is_array($users)) {
+            foreach ($users as $user) {
+                if (self::getHash($user['username'], $user['tx_cdsrcbepwreset_resetHash']) === $hash) {
+                    return $user;
+                }
+            }
+
         }
 
         return false;
