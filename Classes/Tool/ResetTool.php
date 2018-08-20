@@ -33,7 +33,6 @@ use CDSRC\CdsrcBepwreset\Utility\HashUtility;
 use CDSRC\CdsrcBepwreset\Utility\LogUtility;
 use CDSRC\CdsrcBepwreset\View\MailStandaloneView;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -103,7 +102,7 @@ class ResetTool
             'siteName' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'],
         ];
 
-        if(is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cdsrc_bepwreset']['CDSRC\CdsrcBepwreset\Tool\ResetTool']['preRenderMail'])) {
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cdsrc_bepwreset']['CDSRC\CdsrcBepwreset\Tool\ResetTool']['preRenderMail'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cdsrc_bepwreset']['CDSRC\CdsrcBepwreset\Tool\ResetTool']['preRenderMail'] as $reference) {
                 $hookParameters = [
                     'variables' => &$variables,
@@ -204,7 +203,7 @@ class ResetTool
             }
         }
 
-        if(is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cdsrc_bepwreset']['CDSRC\CdsrcBepwreset\Tool\ResetTool']['preResetPassword'])) {
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cdsrc_bepwreset']['CDSRC\CdsrcBepwreset\Tool\ResetTool']['preResetPassword'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cdsrc_bepwreset']['CDSRC\CdsrcBepwreset\Tool\ResetTool']['preResetPassword'] as $reference) {
                 $hookParameters = [
                     'password' => $trimedPassword,
@@ -277,21 +276,17 @@ class ResetTool
     protected function updateResetCode()
     {
         if (!empty($this->user)) {
-            /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
-            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('be_users');
-            $namedParameterUid = $queryBuilder->createNamedParameter(intval($this->user['uid']),\PDO::PARAM_INT);
-            $hash = md5((String)$EXEC_TIME . '-' . mt_rand(1000, 100000));
-            $namedParameterHash = $queryBuilder->createNamedParameter($hash,\PDO::PARAM_STR);
-            $namedParameterHashValidity = $queryBuilder->createNamedParameter(($EXEC_TIME + 3600),\PDO::PARAM_INT);
-            $updateQuery = $queryBuilder->update('be_users')
-                                ->where($queryBuilder->expr()->eq('uid',$namedParameterUid))
-                                ->set('tstamp',$queryBuilder->createNamedParameter($EXEC_TIME,\PDO::PARAM_INT))
-                                ->set('tx_cdsrcbepwreset_resetHash',$namedParameterHash)
-                                ->set('tx_cdsrcbepwreset_resetHashValidity',$namedParameterHashValidity);
-            if ($updateQuery->execute()) {
+            $fields = array(
+                'tstamp' => $GLOBALS['EXEC_TIME'],
+                'tx_cdsrcbepwreset_resetHash' => md5($GLOBALS['EXEC_TIME'] . '-' . mt_rand(1000, 100000)),
+                'tx_cdsrcbepwreset_resetHashValidity' => $GLOBALS['EXEC_TIME'] + 3600,
+            );
+
+            if ($GLOBALS['TYPO3_DB']->exec_UPDATEquery('be_users', 'uid=' . intval($this->user['uid']), $fields)) {
                 return $fields;
             }
         }
+
         return false;
     }
 
@@ -316,20 +311,7 @@ class ResetTool
         if (strlen($username) === 0) {
             throw new InvalidUsernameException('Username is empty.', 1424708826);
         }
-        if (class_exists(ConnectionPool::class)) {
-            /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
-            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('be_users');
-            $users = $queryBuilder->select('*')
-                                  ->from('be_users')
-                                  ->where($queryBuilder->expr()->eq(
-                                      'username',
-                                      $queryBuilder->createNamedParameter($username, \PDO::PARAM_STR)
-                                  ))
-                                  ->execute()
-                                  ->fetchAll();
-        } else {
-            $users = BackendUtility::getRecordsByField('be_users', 'username', $username);
-        }
+        $users = BackendUtility::getRecordsByField('be_users', 'username', $username);
         $count = count($users);
         if ($count === 0) {
             throw new InvalidBackendUserException('User do not exists.', 1424709938);

@@ -15,7 +15,6 @@ namespace CDSRC\CdsrcBepwreset\Utility;
  * The TYPO3 project - inspiring people to share!
  */
 use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -154,22 +153,12 @@ class ExtensionConfigurationUtility
     protected static function setBackendGroups($groupIds, &$finalGroupIds)
     {
         if (is_array($groupIds) && count($groupIds) > 0) {
-            if (class_exists(ConnectionPool::class)) {
-                /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
-                $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('be_groups');
-                $groups = $queryBuilder->select('uid', 'subgroup')
-                                       ->from('be_groups')
-                                       ->where($queryBuilder->expr()->in('uid', $groupIds))
-                                       ->execute()
-                                       ->fetchAll();
-            } else {
-                $groups = BackendUtility::getRecordsByField(
-                    'be_groups',
-                    'deleted',
-                    0,
-                    ' AND uid IN(' . implode(',', $groupIds) . ')'
-                );
-            }
+            $groups = BackendUtility::getRecordsByField(
+                'be_groups',
+                'deleted',
+                0,
+                ' AND uid IN(' . implode(',', $groupIds) . ')'
+            );
             $subGroupIds = array();
             if (is_array($groups)) {
                 foreach ($groups as $group) {

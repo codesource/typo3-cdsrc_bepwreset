@@ -15,8 +15,6 @@ namespace CDSRC\CdsrcBepwreset\Utility;
  * The TYPO3 project - inspiring people to share!
  */
 use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * class providing configuration checks for cdsrc_bepwreset.
@@ -59,17 +57,7 @@ class ExtensionManagerConfigurationUtility
             $selectedGroups = explode(',', $selectedGroups);
         }
 
-        if (class_exists(ConnectionPool::class)) {
-            /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
-            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('be_groups');
-            $groups = $queryBuilder->select('uid', 'title')
-                                   ->from('be_groups')
-                                   ->orderBy('title')
-                                   ->execute()
-                                   ->fetchAll();
-        } else {
-            $groups = BackendUtility::getRecordsByField('be_groups', 'deleted', 0, '', '', 'title ASC');
-        }
+        $groups = BackendUtility::getRecordsByField('be_groups', 'deleted', 0, '', '', 'title ASC');
 
         $id = 'cdsrc_bepwreset_' . self::$javascriptIdIndex;
         self::$javascriptIdIndex++;

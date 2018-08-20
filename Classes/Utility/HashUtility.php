@@ -17,8 +17,6 @@ namespace CDSRC\CdsrcBepwreset\Utility;
  */
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Manage hash code
@@ -48,19 +46,13 @@ class HashUtility
      */
     public static function getUser($hash)
     {
-        if (class_exists(ConnectionPool::class)) {
-            /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
-            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('be_users');
-            $users = $queryBuilder->select('*')
-                                   ->from('be_users')
-                                   ->where($queryBuilder->expr()
-                                        ->eq($this::getHash('be_users.username','be_users.tx_cdsrcbepwreset_resetHash'),
-                                                $queryBuilder->createNamedParameter($hash,\PDO::PARAM_STR))
-                                   )->execute()
-                                   ->fetchAll();
-        } else {
-            $users = BackendUtility::getRecordsByField('be_users', 'deleted', 0, ' AND ' . $whereClause);
-        }
+        $whereClause = vsprintf("CAST(SHA1(CONCAT(%s,'::',%s,'::%s')) AS CHAR) = %s", [
+            'be_users.username',
+            'be_users.tx_cdsrcbepwreset_resetHash',
+            md5($GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey']),
+            $GLOBALS['TYPO3_DB']->fullQuoteStr($hash, 'be_users'),
+        ]);
+        $users = BackendUtility::getRecordsByField('be_users', 'deleted', 0, ' AND ' . $whereClause);
         if (is_array($users) && count($users) === 1) {
             return $users[0];
         }
