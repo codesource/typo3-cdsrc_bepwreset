@@ -14,7 +14,7 @@ $EM_CONF[$_EXTKEY] = [
     'title' => 'BE User Password Reset',
     'description' => 'Allow backend user to reset his password from login form. Option can be specified to force Backend user to change his password at first login.',
     'category' => 'Backend',
-    'version' => '2.2.0',
+    'version' => '2.2.1',
     'state' => 'stable',
     'uploadfolder' => false,
     'createDirs' => '',
@@ -24,7 +24,7 @@ $EM_CONF[$_EXTKEY] = [
     'author_company' => 'Code-Source',
     'constraints' => [
         'depends' => [
-            'typo3' => '7.6.0-8.7.99',
+            'typo3' => '7.6.0-7.6.99',
         ],
         'conflicts' => [],
         'suggests' => [],
