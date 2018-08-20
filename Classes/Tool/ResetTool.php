@@ -37,6 +37,7 @@ use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Lang\LanguageService;
 
 /**
  *
@@ -79,7 +80,7 @@ class ResetTool
     {
         // This call disable bypassedOnResetAtNextLogin
         $this->initUser($username, false, true);
-        $GLOBALS['LANG']->includeLLFile('EXT:cdsrc_bepwreset/Resources/Private/Language/locallang.xlf');
+        $this->getLanguageService()->includeLLFile('EXT:cdsrc_bepwreset/Resources/Private/Language/locallang.xlf');
 
         if (($fields = $this->updateResetCode()) === false) {
             throw new ResetCodeNotUpdatedException('Enable to append reset code to user.', 1424785971);
@@ -321,6 +322,9 @@ class ResetTool
         }
 
         $this->user = $users[0];
+        if(isset($this->user['lang']) && $this->user['lang']){
+            $this->getLanguageService()->init($this->user['lang']);
+        }
 
         // Administrator, white list and black list are not checked if user require a password reset at next login
         if (intval($this->user['tx_cdsrcbepwreset_resetAtNextLogin']) === 0 || !$bypassCheckOnResetAtNextLogin) {
@@ -365,6 +369,14 @@ class ResetTool
         }
 
         return false;
+    }
+
+    /**
+     * @return LanguageService
+     */
+    protected function getLanguageService()
+    {
+        return $GLOBALS['LANG'];
     }
 
 }
