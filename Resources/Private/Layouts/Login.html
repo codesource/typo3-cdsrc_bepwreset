@@ -1,251 +1,286 @@
 <div class="typo3-login">
 	<div class="typo3-login-inner">
 
-	<div class="typo3-login-container">
-        <div class="typo3-login-wrap">
-            <div class="panel panel-lg panel-login">
-                <div class="panel-body">
-                    <div class="typo3-login-logo">
-                        <img src="{logo}" class="typo3-login-image" alt=""/>
-                    </div>
-                    <f:if condition="{passwordResetHeader}">
-                        <f:switch expression="{passwordResetStatus}">
-                            <f:case value="ok">
-                                <div class="t3js-login-success">
-                                    <div class="alert alert-success">
-                                        <strong>{passwordResetHeader}</strong>
-                                        <p>{passwordResetMessage}</p>
-                                    </div>
-                                </div>
-                            </f:case>
-                            <f:case value="error">
-                                <div class="t3js-login-error">
-                                    <div class="alert alert-danger">
-                                        <strong>{passwordResetHeader}</strong>
-                                        <p>{passwordResetMessage}</p>
-                                    </div>
-                                </div>
-                            </f:case>
-                            <f:defaultCase>
-                                <div class="t3js-login-warning">
-                                    <div class="alert alert-warning">
-                                        <strong>{passwordResetHeader}</strong>
-                                        <p>{passwordResetMessage}</p>
-                                    </div>
-                                </div>
-                            </f:defaultCase>
-                        </f:switch>
-                    </f:if>
-                    <f:switch expression="{formType}">
-                        <f:case value="LoginForm">
-                            <f:if condition="{hasLoginError}">
-                                <div class="t3js-login-error" id="t3-login-error">
-                                    <div class="alert alert-danger">
-                                        <strong>
-                                            <f:translate key="login.error.message"/>
-                                        </strong>
-                                        <p>
-                                            <f:translate key="login.error.description"/>
-                                        </p>
-                                    </div>
-                                </div>
-                            </f:if>
-                            <noscript>
-                                <f:be.infobox message="{f:translate(key: 'login.error.javascript')}" state="2"/>
-                            </noscript>
-                            <div class="hidden t3js-login-error-nocookies">
-                                <f:be.infobox message="{f:translate(key: 'login.error.cookies')}" state="2"/>
-                            </div>
-                            <div class="typo3-login-form t3js-login-formfields">
-                                <form action="?loginProvider={loginProviderIdentifier}" method="post" name="loginform" id="typo3-login-form">
-                                    <f:form.hidden name="login_status" value="login"/>
-                                    <f:form.hidden name="userident" id="t3-field-userident" class="t3js-login-userident-field" value=""/>
-                                    <f:form.hidden name="redirect_url" value="{redirectUrl}"/>
-                                    <f:form.hidden name="loginRefresh" value="{loginRefresh}"/>
+		<div class="typo3-login-container">
+			<div class="typo3-login-wrap">
+				<div class="panel panel-lg panel-login">
+					<div class="panel-body">
+						<div class="typo3-login-logo">
+							<img src="{logo}" class="typo3-login-image" alt=""/>
+						</div>
+						<f:if condition="{passwordResetHeader}">
+							<f:switch expression="{passwordResetStatus}">
+								<f:case value="ok">
+									<div class="t3js-login-success">
+										<div class="alert alert-success">
+											<strong>{passwordResetHeader}</strong>
+											<p>{passwordResetMessage}</p>
+										</div>
+									</div>
+								</f:case>
+								<f:case value="error">
+									<div class="t3js-login-error">
+										<div class="alert alert-danger">
+											<strong>{passwordResetHeader}</strong>
+											<p>{passwordResetMessage}</p>
+										</div>
+									</div>
+								</f:case>
+								<f:defaultCase>
+									<div class="t3js-login-warning">
+										<div class="alert alert-warning">
+											<strong>{passwordResetHeader}</strong>
+											<p>{passwordResetMessage}</p>
+										</div>
+									</div>
+								</f:defaultCase>
+							</f:switch>
+						</f:if>
+						<f:switch expression="{formType}">
+							<f:case value="LoginForm">
+								<f:if condition="{hasLoginError}">
+									<div class="t3js-login-error" id="t3-login-error">
+										<div class="alert alert-danger">
+											<strong>
+												<f:translate key="login.error.message"/>
+											</strong>
+											<p>
+												<f:translate key="login.error.description"/>
+											</p>
+										</div>
+									</div>
+								</f:if>
+								<noscript>
+									<f:be.infobox message="{f:translate(key: 'login.error.javascript')}" state="2"/>
+								</noscript>
+								<div class="hidden t3js-login-error-nocookies">
+									<f:be.infobox message="{f:translate(key: 'login.error.cookies')}" state="2"/>
+								</div>
+								<div class="typo3-login-form t3js-login-formfields">
+									<form action="?loginProvider={loginProviderIdentifier}" method="post" name="loginform"
+												id="typo3-login-form">
+										<f:form.hidden name="login_status" value="login"/>
+										<f:form.hidden name="userident" id="t3-field-userident" class="t3js-login-userident-field"
+																	 value=""/>
+										<f:form.hidden name="redirect_url" value="{redirectUrl}"/>
+										<f:form.hidden name="loginRefresh" value="{loginRefresh}"/>
 
-                                    <f:render partial="Login/InterfaceSelector" arguments="{_all}"/>
+										<f:render partial="Login/InterfaceSelector" arguments="{_all}"/>
 
-                                    <f:render section="loginFormFields"/>
+										<f:render section="loginFormFields"/>
 
-                                    <div class="form-group" id="t3-login-submit-section">
-                                        <button class="btn btn-block btn-login t3js-login-submit" id="t3-login-submit" type="submit" name="commandLI" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> {f:translate(key: 'login.process')}" autocomplete="off">
-                                            <f:translate key="login.submit"/>
-                                        </button>
-                                    </div>
-                                    <f:if condition="{passwordCanBeReset}">
-                                        <div class="form-group">
-                                            <a href="?loginProvider={loginProviderIdentifier}&commandRS=request" class="text-center text-warning">
-                                                <f:translate key="labels.passwordForgotten" extensionName="CdsrcBepwreset"/>
-                                            </a>
-                                        </div>
-                                    </f:if>
-                                    <ul class="list-unstyled typo3-login-links">
-                                        <f:for each="{loginProviders}" as="provider" key="providerKey">
-                                            <f:if condition="{provider.label}">
-                                                <f:if condition="{loginProviderIdentifier} != {providerKey}">
-                                                    <li class="t3js-loginprovider-switch" data-providerkey="{providerKey}">
-                                                        <a href="?loginProvider={providerKey}"><i class="fa fa-fw {provider.icon-class}"></i>
-                                                            <span><f:translate key="{provider.label}"/></span></a></li>
-                                                </f:if>
-                                            </f:if>
-                                        </f:for>
-                                    </ul>
-                                </form>
-                            </div>
-                        </f:case>
-                        <f:case value="LogoutForm">
-                            <form action="../../../../../../index.php" method="post" name="loginform">
-                                <input type="hidden" name="login_status" value="logout"/>
-                                <div class="t3-login-box-body">
-                                    <div class="t3-login-logout-form">
-                                        <div class="t3-login-username">
-                                            <div class="t3-login-label t3-username">
-                                                <f:translate key="login.username"/>
-                                            </div>
-                                            <div class="t3-username-current">
-                                                {backendUser.username}
-                                            </div>
-                                        </div>
-                                        <f:if condition="{showInterfaceSelector}">
-                                            <f:then>
-                                                <div class="t3-login-interface">
-                                                    <div class="t3-login-label t3-interface-selector">
-                                                        <f:translate key="login.interface"/>
-                                                    </div>
-                                                    <f:form.select name="users" options="{interfaces}" optionValueField="jumpScript" optionLabelField="label"/>
-                                                </div>
-                                            </f:then>
-                                            <f:else>
-                                                <f:if condition="{interface}">
-                                                    <f:form.hidden name="interface" value="{interface}"/>
-                                                </f:if>
-                                            </f:else>
-                                        </f:if>
-                                        <input type="hidden" name="p_field" value=""/>
-                                        <input class="btn btn-block btn-lg" type="submit" name="commandLO" value="{f:translate(key: 'login.submit')}" id="t3-login-submit"/>
-                                    </div>
-                                </div>
-                            </form>
-                        </f:case>
-                        <f:case value="PasswordChangeForm">
-                            <f:if condition="{BeSecurePwEnable}">
-                                <div class="t3js-login-warning">
-                                    <div class="alert alert-info">
-                                        <strong>
-                                            <f:translate key="beSecurePw.header" extensionName="BeSecurePw"/>
-                                        </strong>
-                                        <p>
-                                            <f:format.raw>
-                                                <f:translate
-                                                        key="beSecurePw.description"
-                                                        extensionName="BeSecurePw"
-                                                        arguments="{
+										<div class="form-group" id="t3-login-submit-section">
+											<button class="btn btn-block btn-login t3js-login-submit" id="t3-login-submit" type="submit"
+															name="commandLI"
+															data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> {f:translate(key: 'login.process')}"
+															autocomplete="off">
+												<f:translate key="login.submit"/>
+											</button>
+										</div>
+										<f:if condition="{passwordCanBeReset}">
+											<div class="form-group">
+												<a href="?loginProvider={loginProviderIdentifier}&commandRS=request"
+													 class="text-center text-warning">
+													<f:translate key="labels.passwordForgotten" extensionName="CdsrcBepwreset"/>
+												</a>
+											</div>
+										</f:if>
+										<ul class="list-unstyled typo3-login-links">
+											<f:for each="{loginProviders}" as="provider" key="providerKey">
+												<f:if condition="{provider.label}">
+													<f:if condition="{loginProviderIdentifier} != {providerKey}">
+														<li class="t3js-loginprovider-switch" data-providerkey="{providerKey}">
+															<a href="?loginProvider={providerKey}"><i class="fa fa-fw {provider.icon-class}"></i>
+																<span><f:translate key="{provider.label}"/></span></a></li>
+													</f:if>
+												</f:if>
+											</f:for>
+										</ul>
+									</form>
+								</div>
+							</f:case>
+							<f:case value="LogoutForm">
+								<form action="../../../../../../index.php" method="post" name="loginform">
+									<input type="hidden" name="login_status" value="logout"/>
+									<div class="t3-login-box-body">
+										<div class="t3-login-logout-form">
+											<div class="t3-login-username">
+												<div class="t3-login-label t3-username">
+													<f:translate key="login.username"/>
+												</div>
+												<div class="t3-username-current">
+													{backendUser.username}
+												</div>
+											</div>
+											<f:if condition="{showInterfaceSelector}">
+												<f:then>
+													<div class="t3-login-interface">
+														<div class="t3-login-label t3-interface-selector">
+															<f:translate key="login.interface"/>
+														</div>
+														<f:form.select name="users" options="{interfaces}" optionValueField="jumpScript"
+																					 optionLabelField="label"/>
+													</div>
+												</f:then>
+												<f:else>
+													<f:if condition="{interface}">
+														<f:form.hidden name="interface" value="{interface}"/>
+													</f:if>
+												</f:else>
+											</f:if>
+											<input type="hidden" name="p_field" value=""/>
+											<input class="btn btn-block btn-lg" type="submit" name="commandLO"
+														 value="{f:translate(key: 'login.submit')}" id="t3-login-submit"/>
+										</div>
+									</div>
+								</form>
+							</f:case>
+							<f:case value="PasswordChangeForm">
+								<f:if condition="{BeSecurePwEnable}">
+									<div class="t3js-login-warning">
+										<div class="alert alert-info">
+											<strong>
+												<f:translate key="beSecurePw.header" extensionName="BeSecurePw"/>
+											</strong>
+											<p>
+												<f:format.raw>
+													<f:translate
+														key="beSecurePw.description"
+														extensionName="BeSecurePw"
+														arguments="{
                                                         0:BeSecurePwLength,
                                                         1:BeSecurePwChecks,
                                                         2:BeSecurePwPatterns
                                                     }"/>
-                                            </f:format.raw>
-                                        </p>
-                                    </div>
-                                </div>
-                            </f:if>
-                            <noscript>
-                                <f:be.infobox message="{f:translate(key: 'login.error.javascript')}" state="2"/>
-                            </noscript>
-                            <div class="hidden t3js-login-error-nocookies">
-                                <f:be.infobox message="{f:translate(key: 'login.error.cookies')}" state="2"/>
-                            </div>
-                            <div class="typo3-login-form t3js-login-formfields">
-                                <form action="?loginProvider={loginProviderIdentifier}" method="post" name="loginform" id="typo3-reset-password-form">
-                                    <div class="form-group t3js-login-password-section" id="t3-reset-password-section">
-                                        <div class="form-control-wrap">
-                                            <div class="form-control-holder">
-                                                <input type="password" id="t3-reset-password" name="r_password" value="" placeholder="{f:translate(key: 'login.password')}" class="form-control input-login t3js-clearable t3js-login-password-field" required="required"/>
-                                                <div class="form-notice-capslock hidden t3js-login-alert-capslock">
-                                                    <img src="{images.capslock}" width="14" height="14" alt="{f:translate(key: 'login.error.capslock')}" title="{f:translate(key: 'login.error.capslock')}"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group t3js-login-password-section" id="t3-reset-password-confirmation-section">
-                                        <div class="form-control-wrap">
-                                            <div class="form-control-holder">
-                                                <input type="password" id="t3-reset-password-confirmation" name="r_password_confirmation" value="" placeholder="{f:translate(key: 'labels.password_confirmation', extensionName:'CdsrcBepwreset')}" class="form-control input-login t3js-clearable" required="required"/>
-                                                <div class="form-notice-capslock hidden t3js-login-alert-capslock">
-                                                    <img src="{images.capslock}" width="14" height="14" alt="{f:translate(key: 'login.error.capslock')}" title="{f:translate(key: 'login.error.capslock')}"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+												</f:format.raw>
+											</p>
+										</div>
+									</div>
+								</f:if>
+								<noscript>
+									<f:be.infobox message="{f:translate(key: 'login.error.javascript')}" state="2"/>
+								</noscript>
+								<div class="hidden t3js-login-error-nocookies">
+									<f:be.infobox message="{f:translate(key: 'login.error.cookies')}" state="2"/>
+								</div>
+								<div class="typo3-login-form t3js-login-formfields">
+									<form action="?loginProvider={loginProviderIdentifier}" method="post" name="loginform"
+												id="typo3-reset-password-form">
+										<div class="form-group t3js-login-password-section" id="t3-reset-password-section">
+											<div class="form-control-wrap">
+												<div class="form-control-holder">
+													<input type="password" id="t3-reset-password" name="r_password" value=""
+																 placeholder="{f:translate(key: 'login.password')}"
+																 class="form-control input-login t3js-clearable t3js-login-password-field"
+																 required="required"/>
+													<div class="form-notice-capslock hidden t3js-login-alert-capslock">
+														<img src="{images.capslock}" width="14" height="14"
+																 alt="{f:translate(key: 'login.error.capslock')}"
+																 title="{f:translate(key: 'login.error.capslock')}"/>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="form-group t3js-login-password-section" id="t3-reset-password-confirmation-section">
+											<div class="form-control-wrap">
+												<div class="form-control-holder">
+													<input type="password" id="t3-reset-password-confirmation" name="r_password_confirmation"
+																 value=""
+																 placeholder="{f:translate(key: 'labels.password_confirmation', extensionName:'CdsrcBepwreset')}"
+																 class="form-control input-login t3js-clearable" required="required"/>
+													<div class="form-notice-capslock hidden t3js-login-alert-capslock">
+														<img src="{images.capslock}" width="14" height="14"
+																 alt="{f:translate(key: 'login.error.capslock')}"
+																 title="{f:translate(key: 'login.error.capslock')}"/>
+													</div>
+												</div>
+											</div>
+										</div>
 
-                                    <div class="form-group" id="t3-reset-submit-section">
-                                        <button class="btn btn-block btn-primary t3js-reset-password-submit" id="t3js-reset-password-submit" type="submit" name="commandRS_submit" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> {f:translate(key: 'labels.reset.process', extensionName:'CdsrcBepwreset')}" autocomplete="off">
-                                            <f:translate key="labels.reset" extensionName="CdsrcBepwreset"/>
-                                        </button>
-                                        <input type="hidden" value="reset" name="commandRS"/>
-                                    </div>
-                                </form>
-                            </div>
-                        </f:case>
-                        <f:case value="PasswordRequestForm">
-                            <noscript>
-                                <f:be.infobox message="{f:translate(key: 'login.error.javascript')}" state="2"/>
-                            </noscript>
-                            <div class="hidden t3js-login-error-nocookies">
-                                <f:be.infobox message="{f:translate(key: 'login.error.cookies')}" state="2"/>
-                            </div>
-                            <div class="typo3-login-form t3js-login-formfields">
-                                <form action="?loginProvider={loginProviderIdentifier}" method="post" name="loginform" id="typo3-reset-password-form">
+										<div class="form-group" id="t3-reset-submit-section">
+											<button class="btn btn-block btn-primary t3js-reset-password-submit"
+															id="t3js-reset-password-submit" type="submit" name="commandRS_submit"
+															data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> {f:translate(key: 'labels.reset.process', extensionName:'CdsrcBepwreset')}"
+															autocomplete="off">
+												<f:translate key="labels.reset" extensionName="CdsrcBepwreset"/>
+											</button>
+											<input type="hidden" value="reset" name="commandRS"/>
+										</div>
+									</form>
+								</div>
+							</f:case>
+							<f:case value="PasswordRequestForm">
+								<noscript>
+									<f:be.infobox message="{f:translate(key: 'login.error.javascript')}" state="2"/>
+								</noscript>
+								<div class="hidden t3js-login-error-nocookies">
+									<f:be.infobox message="{f:translate(key: 'login.error.cookies')}" state="2"/>
+								</div>
+								<div class="typo3-login-form t3js-login-formfields">
+									<form action="?loginProvider={loginProviderIdentifier}" method="post" name="loginform"
+												id="typo3-reset-password-form">
 
-                                    <div class="form-group t3js-reset-password-username-section" id="t3-reset-password-username-section">
-                                        <div class="form-control-wrap">
-                                            <div class="form-control-holder">
-                                                <input type="text" id="t3-reset-password-username" name="r_username" value="{presetUsername}" placeholder="{f:translate(key: 'login.username')}" class="form-control input-login t3js-clearable t3js-login-username-field" autofocus="autofocus" required="required"/>
-                                                <div class="form-notice-capslock hidden t3js-login-alert-capslock">
-                                                    <img src="{images.capslock}" width="14" height="14" alt="{f:translate(key: 'login.error.capslock')}" title="{f:translate(key: 'login.error.capslock')}"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+										<div class="form-group t3js-reset-password-username-section"
+												 id="t3-reset-password-username-section">
+											<div class="form-control-wrap">
+												<div class="form-control-holder">
+													<input type="text" id="t3-reset-password-username" name="r_username" value="{presetUsername}"
+																 placeholder="{f:translate(key: 'login.username')}"
+																 class="form-control input-login t3js-clearable t3js-login-username-field"
+																 autofocus="autofocus" required="required"/>
+													<div class="form-notice-capslock hidden t3js-login-alert-capslock">
+														<img src="{images.capslock}" width="14" height="14"
+																 alt="{f:translate(key: 'login.error.capslock')}"
+																 title="{f:translate(key: 'login.error.capslock')}"/>
+													</div>
+												</div>
+											</div>
+										</div>
 
-                                    <div class="form-group" id="t3-reset-submit-section">
-                                        <button class="btn btn-block btn-primary t3js-reset-password-submit" id="t3js-reset-password-submit" type="submit" name="commandRS_submit" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> {f:translate(key: 'labels.reset.process', extensionName:'CdsrcBepwreset')}" autocomplete="off">
-                                            <f:translate key="labels.requestPasswordChange" extensionName="CdsrcBepwreset"/>
-                                        </button>
-                                        <input type="hidden" value="send" name="commandRS"/>
-                                    </div>
-                                </form>
-                            </div>
-                        </f:case>
-                    </f:switch>
-                </div>
-                <f:render partial="LoginNews" arguments="{_all}"/>
-                <div class="panel-footer">
-                    <div class="login-copyright-wrap">
-                        <a href="#loginCopyright" class="typo3-login-copyright-link collapsed" data-toggle="collapse" aria-expanded="false" aria-controls="loginCopyright">
-                            <span><f:translate key="login.copyrightLink"/></span>
-                            <img src="{images.typo3}" alt="{f:translate(key: 'login.typo3Logo')}" width="70" height="20"/>
-                        </a>
-                        <div id="loginCopyright" class="collapse">
-                            <div class="typo3-login-copyright-text">
-                                <p>
-                                    <f:format.raw>{copyright}</f:format.raw>
-                                </p>
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <a href="https://typo3.org" target="_blank" class="t3-login-link-typo3"><i class="fa fa-external-link"></i>
-                                            TYPO3.org</a></li>
-                                    <li>
-                                        <a href="https://typo3.org/donate/online-donation/" target="_blank" class="t3-login-link-donate"><i class="fa fa-external-link"></i>
-                                            <f:translate key="login.donate"/>
-                                        </a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
+										<div class="form-group" id="t3-reset-submit-section">
+											<button class="btn btn-block btn-primary t3js-reset-password-submit"
+															id="t3js-reset-password-submit" type="submit" name="commandRS_submit"
+															data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> {f:translate(key: 'labels.reset.process', extensionName:'CdsrcBepwreset')}"
+															autocomplete="off">
+												<f:translate key="labels.requestPasswordChange" extensionName="CdsrcBepwreset"/>
+											</button>
+											<input type="hidden" value="send" name="commandRS"/>
+										</div>
+									</form>
+								</div>
+							</f:case>
+						</f:switch>
+					</div>
+					<f:render partial="LoginNews" arguments="{_all}"/>
+					<div class="panel-footer">
+						<div class="login-copyright-wrap">
+							<a href="#loginCopyright" class="typo3-login-copyright-link collapsed" data-toggle="collapse"
+								 aria-expanded="false" aria-controls="loginCopyright">
+								<span><f:translate key="login.copyrightLink"/></span>
+								<img src="{images.typo3}" alt="{f:translate(key: 'login.typo3Logo')}" width="70" height="20"/>
+							</a>
+							<div id="loginCopyright" class="collapse">
+								<div class="typo3-login-copyright-text">
+									<p>
+										<f:format.raw>{copyright}</f:format.raw>
+									</p>
+									<ul class="list-unstyled">
+										<li>
+											<a href="https://typo3.org" target="_blank" class="t3-login-link-typo3"><i
+												class="fa fa-external-link"></i>
+												TYPO3.org</a></li>
+										<li>
+											<a href="https://typo3.org/donate/online-donation/" target="_blank"
+												 class="t3-login-link-donate"><i class="fa fa-external-link"></i>
+												<f:translate key="login.donate"/>
+											</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
