@@ -20,9 +20,9 @@
 </f:section>
 
 <f:section name="Plain">
-    Hallo {f:if(condition:user.realName, then:' {user.realName}')},
+    Hallo {f:if(condition:user.realName, then:' {user.realName -> f:format.raw()}')},
 
-    Sie haben für Ihren Benutzer "{user.username}" ein neues Passwort angefordert.
+    Sie haben für Ihren Benutzer "{user.username -> f:format.raw()}" ein neues Passwort angefordert.
 
     Um den Prozess abzuschließen, klicken Sie bitte auf folgenden Link: {url -> f:format.raw()}
     Dieser Link ist gültig bis zum {validity -> f:format.date(format:'d.m.Y H:i')} Uhr.
