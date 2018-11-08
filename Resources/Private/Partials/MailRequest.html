@@ -1,5 +1,5 @@
 <f:section name="Subject">
-    <f:translate key="requestNewPassword.subject" extensionName="CdsrcBepwreset" arguments="{0:siteName}"/>
+    <f:format.raw><f:translate key="requestNewPassword.subject" extensionName="CdsrcBepwreset" arguments="{0:siteName}"/></f:format.raw>
 </f:section>
 
 <f:section name="Html">
@@ -23,9 +23,9 @@
 </f:section>
 
 <f:section name="Plain">
-Hi{f:if(condition:user.realName, then:' {user.realName}')},
+Hi{f:if(condition:user.realName, then:' {user.realName -> f:format.raw()}')},
 
-Password reset has been requested for user "{user.username}".
+Password reset has been requested for user "{user.username -> f:format.raw()}".
 Please click on this link if you did this request (valid until {validity -> f:format.date(format:'d.m.Y H:i')})
 {url -> f:format.raw()}
 
