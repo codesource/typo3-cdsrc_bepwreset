@@ -1,5 +1,5 @@
 <div class="typo3-login">
-    <div class="typo3-login-container">
+    <div class="typo3-login-container typo3-login-inner">
         <div class="typo3-login-wrap">
             <div class="panel panel-lg panel-login">
                 <div class="panel-body">
@@ -24,14 +24,14 @@
                                     </div>
                                 </div>
                             </f:case>
-                            <f:case default="1">
+                            <f:defaultCase>
                                 <div class="t3js-login-warning">
                                     <div class="alert alert-warning">
                                         <strong>{passwordResetHeader}</strong>
                                         <p>{passwordResetMessage}</p>
                                     </div>
                                 </div>
-                            </f:case>
+                            </f:defaultCase>
                         </f:switch>
                     </f:if>
                     <f:switch expression="{formType}">
