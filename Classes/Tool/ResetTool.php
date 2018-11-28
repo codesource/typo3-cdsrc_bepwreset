@@ -33,7 +33,6 @@ use CDSRC\CdsrcBepwreset\Utility\ExtensionConfigurationUtility;
 use CDSRC\CdsrcBepwreset\Utility\HashUtility;
 use CDSRC\CdsrcBepwreset\Utility\LogUtility;
 use CDSRC\CdsrcBepwreset\View\MailStandaloneView;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Mail\MailMessage;
@@ -58,7 +57,7 @@ class ResetTool
     protected $extKey = 'cdsrc_bepwreset';
 
     /**
-     * Backend user datas
+     * Backend user data
      *
      * @var array
      */
@@ -416,7 +415,7 @@ class ResetTool
      */
     protected function getLanguageService()
     {
-        return $GLOBALS['LANG'];
+        return $GLOBALS['LANG'] ?: GeneralUtility::makeInstance(LanguageService::class);
     }
 
     /**

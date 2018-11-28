@@ -27,25 +27,27 @@ use TYPO3\CMS\Lang\LanguageService;
  *
  * @author Matthias Toscanelli <m.toscanelli@code-source.ch>
  */
-class UserAuthHook {
+class UserAuthHook
+{
 
     /**
      * Log off and redirect if password reset is required
      * @param array $params
      * @param BackendUserAuthentication $pObj
      */
-    public function postUserLookUp($params, $pObj){
-        if($pObj instanceof BackendUserAuthentication){
-            if(!empty($pObj->user)){
-                if(intval($pObj->user['tx_cdsrcbepwreset_resetAtNextLogin']) === 1){
-                    try{
+    public function postUserLookUp($params, $pObj)
+    {
+        if ($pObj instanceof BackendUserAuthentication) {
+            if (!empty($pObj->user)) {
+                if (intval($pObj->user['tx_cdsrcbepwreset_resetAtNextLogin']) === 1) {
+                    try {
                         $user = $pObj->user;
                         /** @var ResetTool $resetTool */
                         $resetTool = GeneralUtility::makeInstance(ResetTool::class);
                         $fields = $resetTool->updateResetCodeForUser($user['username']);
 
                         // Initialize LanguageService if needed
-                        if(!$GLOBALS['LANG']){
+                        if (!$GLOBALS['LANG']) {
                             $uc = unserialize($user['uc']);
                             $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageService::class);
                             $GLOBALS['LANG']->init($uc['lang']);
@@ -55,7 +57,7 @@ class UserAuthHook {
 
                         LogUtility::writeLog('Password change request generated for "%s (%s)"', $user['uid'], $user['username'], $user['uid']);
                         SessionUtility::setDataAndRedirect('force', $user['username'], $fields['tx_cdsrcbepwreset_resetHash']);
-                    }catch(\Exception $e){
+                    } catch (\Exception $e) {
                         // Do not log off if reset code could not been updated
                         LogUtility::writeLog('Unable to update password reset code for user "%s (%s)"', $pObj->user['uid'], $pObj->user['username'], $pObj->user['uid']);
 
@@ -65,5 +67,4 @@ class UserAuthHook {
             }
         }
     }
-
 }

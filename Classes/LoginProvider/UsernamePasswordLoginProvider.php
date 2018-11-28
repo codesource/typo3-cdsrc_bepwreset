@@ -29,6 +29,7 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Lang\LanguageService;
 
 class UsernamePasswordLoginProvider extends BaseUsernamePasswordLoginProvider
 {
@@ -59,7 +60,7 @@ class UsernamePasswordLoginProvider extends BaseUsernamePasswordLoginProvider
      */
     protected function initializeFromRequestOrSession()
     {
-        $GLOBALS['LANG']->includeLLFile('EXT:cdsrc_bepwreset/Resources/Private/Language/locallang.xlf');
+        $this->getLanguageService()->includeLLFile('EXT:cdsrc_bepwreset/Resources/Private/Language/locallang.xlf');
         $command = (string)GeneralUtility::_GP('commandRS');
         switch ($command) {
             case 'change':
@@ -129,8 +130,8 @@ class UsernamePasswordLoginProvider extends BaseUsernamePasswordLoginProvider
                     if (!$resetTool->isCodeValidForUser($this->parameters['username'], $this->parameters['code'])) {
                         SessionUtility::setDataAndRedirect(
                             '', '', '', self::RESULT_ERROR,
-                            $GLOBALS['LANG']->getLL('warning.resetPassword'),
-                            $GLOBALS['LANG']->getLL('warning.resetPassword.invalidResetCode')
+                            $this->getLanguageService()->getLL('warning.resetPassword'),
+                            $this->getLanguageService()->getLL('warning.resetPassword.invalidResetCode')
                         );
                     } else {
                         SessionUtility::setData(
@@ -141,7 +142,9 @@ class UsernamePasswordLoginProvider extends BaseUsernamePasswordLoginProvider
                     $pageRenderer->loadRequireJsModule('TYPO3/CMS/CdsrcBepwreset/ResetPassword');
                     $view->assignMultiple([
                         'formType' => 'PasswordChangeForm',
-                        'passwordResetHeader' => $this->command === 'force' ? $GLOBALS['LANG']->getLL('labels.changePasswordAtFirstLogin') : '',
+                        'passwordResetHeader' => $this->command === 'force' ?
+                            $this->getLanguageService()->getLL('labels.changePasswordAtFirstLogin') :
+                            '',
                     ]);
                     $this->setBeSecurePwNotice($view);
                     if ($this->parameters['result'] !== self::RESULT_NONE) {
@@ -161,8 +164,8 @@ class UsernamePasswordLoginProvider extends BaseUsernamePasswordLoginProvider
                     );
                     SessionUtility::setDataAndRedirect(
                         '', '', '', self::RESULT_OK,
-                        $GLOBALS['LANG']->getLL('ok.resetPassword'),
-                        $GLOBALS['LANG']->getLL('ok.resetPasswordMessage')
+                        $this->getLanguageService()->getLL('ok.resetPassword'),
+                        $this->getLanguageService()->getLL('ok.resetPasswordMessage')
                     );
                     break;
                 case 'send':
@@ -170,8 +173,8 @@ class UsernamePasswordLoginProvider extends BaseUsernamePasswordLoginProvider
                         $resetTool->sendResetCode($this->parameters['username']);
                         SessionUtility::setDataAndRedirect(
                             '', '', '', self::RESULT_OK,
-                            $GLOBALS['LANG']->getLL('ok.sendCode'),
-                            $GLOBALS['LANG']->getLL('ok.sendCodeMessage')
+                            $this->getLanguageService()->getLL('ok.sendCode'),
+                            $this->getLanguageService()->getLL('ok.sendCodeMessage')
                         );
                         break;
                     }
@@ -210,7 +213,7 @@ class UsernamePasswordLoginProvider extends BaseUsernamePasswordLoginProvider
                 $this->parameters['username'],
                 $this->parameters['code'],
                 self::RESULT_ERROR,
-                $GLOBALS['LANG']->getLL('warning.resetPassword'),
+                $this->getLanguageService()->getLL('warning.resetPassword'),
                 $this->catchResetToolException($e),
                 $this->command
             );
@@ -228,33 +231,33 @@ class UsernamePasswordLoginProvider extends BaseUsernamePasswordLoginProvider
     protected function catchResetToolException(\Exception $e)
     {
         if ($e instanceof InvalidUsernameException) {
-            return $GLOBALS['LANG']->getLL('warning.resetPassword.userDoNotExists');
+            return $this->getLanguageService()->getLL('warning.resetPassword.userDoNotExists');
         } elseif ($e instanceof InvalidBackendUserException) {
-            return $GLOBALS['LANG']->getLL('warning.resetPassword.userDoNotExists');
+            return $this->getLanguageService()->getLL('warning.resetPassword.userDoNotExists');
         } elseif ($e instanceof PasswordResetPreventedForAdminException) {
-            return $GLOBALS['LANG']->getLL('warning.resetPassword.passwordResetPreventedForAdmin');
+            return $this->getLanguageService()->getLL('warning.resetPassword.passwordResetPreventedForAdmin');
         } elseif ($e instanceof UserInBlackListException) {
-            return $GLOBALS['LANG']->getLL('warning.resetPassword.userIsInBlackList');
+            return $this->getLanguageService()->getLL('warning.resetPassword.userIsInBlackList');
         } elseif ($e instanceof UserNotInWhiteListException) {
-            return $GLOBALS['LANG']->getLL('warning.resetPassword.userIsNotInBlackList');
+            return $this->getLanguageService()->getLL('warning.resetPassword.userIsNotInBlackList');
         } elseif ($e instanceof InvalidUserEmailException) {
-            return $GLOBALS['LANG']->getLL('warning.resetPassword.invalidUserEmail');
+            return $this->getLanguageService()->getLL('warning.resetPassword.invalidUserEmail');
         } elseif ($e instanceof UserHasNoEmailException) {
-            return $GLOBALS['LANG']->getLL('warning.resetPassword.userHasNoEmail');
+            return $this->getLanguageService()->getLL('warning.resetPassword.userHasNoEmail');
         } elseif ($e instanceof InvalidResetCodeException) {
-            return $GLOBALS['LANG']->getLL('warning.resetPassword.invalidResetCode');
+            return $this->getLanguageService()->getLL('warning.resetPassword.invalidResetCode');
         } elseif ($e instanceof InvalidPasswordConfirmationException) {
-            return $GLOBALS['LANG']->getLL('warning.resetPassword.invalidPasswordConfirmation');
+            return $this->getLanguageService()->getLL('warning.resetPassword.invalidPasswordConfirmation');
         } elseif ($e instanceof EmptyPasswordException) {
-            return $GLOBALS['LANG']->getLL('warning.resetPassword.emptyPassword');
+            return $this->getLanguageService()->getLL('warning.resetPassword.emptyPassword');
         } elseif ($e instanceof BeSecurePwException) {
-            return $GLOBALS['LANG']->getLL('warning.resetPassword.beSecurePw');
+            return $this->getLanguageService()->getLL('warning.resetPassword.beSecurePw');
         } elseif ($e instanceof EmailNotSentException) {
-            return $GLOBALS['LANG']->getLL('warning.resetPassword.emailNotSent');
+            return $this->getLanguageService()->getLL('warning.resetPassword.emailNotSent');
         } elseif ($e instanceof InvalidTemplateResourceException) {
             return $e->getMessage();
         } else {
-            return $GLOBALS['LANG']->getLL('warning.resetPassword.unknown');
+            return $this->getLanguageService()->getLL('warning.resetPassword.unknown');
         }
     }
 
@@ -274,7 +277,7 @@ class UsernamePasswordLoginProvider extends BaseUsernamePasswordLoginProvider
             $checkParameter = array();
             foreach ($toCheckParams as $parameter) {
                 if ((bool)$extConf[$parameter]) {
-                    $checkParameter[] = $GLOBALS['LANG']->sL('LLL:EXT:be_secure_pw/Resources/Private/Language/locallang.xml:' . $parameter);
+                    $checkParameter[] = $this->getLanguageService()->sL('LLL:EXT:be_secure_pw/Resources/Private/Language/locallang.xml:' . $parameter);
                 }
             }
             $view->assignMultiple([
@@ -284,5 +287,13 @@ class UsernamePasswordLoginProvider extends BaseUsernamePasswordLoginProvider
                 'BeSecurePwPatterns' => (int)$extConf['patterns'],
             ]);
         }
+    }
+
+    /**
+     * @return LanguageService
+     */
+    protected function getLanguageService()
+    {
+        return $GLOBALS['LANG'] ?: GeneralUtility::makeInstance(LanguageService::class);
     }
 }
