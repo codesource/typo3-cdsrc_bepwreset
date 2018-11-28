@@ -56,9 +56,10 @@ class UserAuthHook {
                         LogUtility::writeLog('Password change request generated for "%s (%s)"', $user['uid'], $user['username'], $user['uid']);
                         SessionUtility::setDataAndRedirect('force', $user['username'], $fields['tx_cdsrcbepwreset_resetHash']);
                     }catch(\Exception $e){
-                        throw $e;
                         // Do not log off if reset code could not been updated
                         LogUtility::writeLog('Unable to update password reset code for user "%s (%s)"', $pObj->user['uid'], $pObj->user['username'], $pObj->user['uid']);
+
+                        throw $e;
                     }
                 }
             }
