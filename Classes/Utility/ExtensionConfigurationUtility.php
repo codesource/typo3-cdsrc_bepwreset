@@ -110,6 +110,18 @@ class ExtensionConfigurationUtility
     }
 
     /**
+     * Plain exception message
+     *
+     * @return boolean
+     */
+    public static function acceptPlainMessageForException()
+    {
+        self::init();
+
+        return isset(self::$extConf['enablePlainExceptionMessage']) && self::$extConf['enablePlainExceptionMessage'];
+    }
+
+    /**
      * Initialize configuration array
      */
     protected static function init()

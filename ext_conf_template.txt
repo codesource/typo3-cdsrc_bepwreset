@@ -8,3 +8,5 @@ backendGroupsWhiteList =
 backendGroupsBlackList =
 # cat=Basic/enable; type=boolean; label=LLL:EXT:cdsrc_bepwreset/Resources/Private/Language/locallang_em.xlf:bypassCheckOnResetAtNextLogin
 bypassCheckOnResetAtNextLogin = 0
+# cat=Basic/enable; type=boolean; label=LLL:EXT:cdsrc_bepwreset/Resources/Private/Language/locallang_em.xlf:enablePlainExceptionMessage
+enablePlainExceptionMessage = 0

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" date="2018-11-28T08:54:12Z" product-name="belog">
+        <header/>
+        <body>
+            <trans-unit id="action_255_55">
+                <source>RESET</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

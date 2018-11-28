@@ -25,6 +25,10 @@
 			<source>Enable password reset from Login Form</source>
 			<target>Ermöglicht das Zurücksetzen des Passworts im Login Formular</target>
 		</trans-unit>
+		<trans-unit id="enablePlainExceptionMessage" xml:space="preserve">
+			<source>Enable full message for exception (should be set to off in production)</source>
+			<target>Vollständige Meldung für Ausnahme aktivieren (sollte in der Produktion auf "Aus" gesetzt sein)</target>
+		</trans-unit>
 		</body>
 	</file>
 </xliff>

@@ -18,6 +18,9 @@
             <trans-unit id="bypassCheckOnResetAtNextLogin" xml:space="preserve">
                 <source>Bypass Administrators, white list and black list: If this option is not checked and user do not pass validation, no password change will be forced at next login</source>
             </trans-unit>
+            <trans-unit id="enablePlainExceptionMessage" xml:space="preserve">
+                <source>Enable full message for exception (should be set to off in production)</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

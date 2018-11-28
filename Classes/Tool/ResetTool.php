@@ -14,6 +14,7 @@ namespace CDSRC\CdsrcBepwreset\Tool;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
 use CDSRC\CdsrcBepwreset\Tool\Exception\BackendUserNotInitializedException;
 use CDSRC\CdsrcBepwreset\Tool\Exception\BeSecurePwException;
 use CDSRC\CdsrcBepwreset\Tool\Exception\EmailNotSentException;
@@ -39,6 +40,7 @@ use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MailUtility;
+use TYPO3\CMS\Lang\LanguageService;
 
 /**
  *
@@ -284,10 +286,10 @@ class ResetTool
             $hash = md5($tstamp . '-' . mt_rand(1000, 100000));
             $hashValidity = $tstamp + 3600;
             $updateQuery = $queryBuilder->update('be_users')
-                                        ->where($queryBuilder->expr()->eq('uid', intval($this->user['uid'])))
-                                        ->set('tstamp', $tstamp, true)
-                                        ->set('tx_cdsrcbepwreset_resetHash', $hash, true)
-                                        ->set('tx_cdsrcbepwreset_resetHashValidity', $hashValidity, true);
+                ->where($queryBuilder->expr()->eq('uid', intval($this->user['uid'])))
+                ->set('tstamp', $tstamp, true)
+                ->set('tx_cdsrcbepwreset_resetHash', $hash, true)
+                ->set('tx_cdsrcbepwreset_resetHashValidity', $hashValidity, true);
 
             if ($updateQuery->execute()) {
                 return [
@@ -322,26 +324,24 @@ class ResetTool
         if (strlen($username) === 0) {
             throw new InvalidUsernameException('Username is empty.', 1424708826);
         }
-        if (class_exists(ConnectionPool::class)) {
-            /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
-            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('be_users');
-            $users = $queryBuilder->select('*')
-                                  ->from('be_users')
-                                  ->where($queryBuilder->expr()->eq(
-                                      'username',
-                                      $queryBuilder->createNamedParameter($username, \PDO::PARAM_STR)
-                                  ))
-                                  ->execute()
-                                  ->fetchAll();
-        } else {
-            $users = BackendUtility::getRecordsByField('be_users', 'username', $username);
-        }
+
+        /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('be_users');
+        $users = $queryBuilder->select('*')
+            ->from('be_users')
+            ->where($queryBuilder->expr()->eq(
+                'username',
+                $queryBuilder->createNamedParameter($username, \PDO::PARAM_STR)
+            ))
+            ->execute()
+            ->fetchAll();
+
         $count = count($users);
         if ($count === 0) {
             throw new InvalidBackendUserException('User do not exists.', 1424709938);
         }
         if ($count > 1) {
-            throw new InvalidBackendUserException('Multiple record found.', 1424709961);
+            $this->throwSecureException(InvalidBackendUserException::class, 'Multiple record found.', 1424709961);
         }
 
         $this->user = $users[0];
@@ -352,26 +352,43 @@ class ResetTool
         // Administrator, white list and black list are not checked if user require a password reset at next login
         if (intval($this->user['tx_cdsrcbepwreset_resetAtNextLogin']) === 0 || !$bypassCheckOnResetAtNextLogin) {
             if ($this->user['admin'] && !ExtensionConfigurationUtility::isAdminAllowedToResetPassword()) {
-                throw new PasswordResetPreventedForAdminException('Admin is not allowed to reset password.',
-                    1424814441);
+                $this->throwSecureException(
+                    PasswordResetPreventedForAdminException::class,
+                    'Admin is not allowed to reset password.',
+                    1424814441
+                );
             }
 
             if (!ExtensionConfigurationUtility::isUserInWhiteList($this->user)) {
-                throw new UserNotInWhiteListException('White list is configured and user is not in.', 1424825158);
+                $this->throwSecureException(
+                    UserNotInWhiteListException::class,
+                    'White list is configured and user is not in.',
+                    1424825158
+                );
             }
 
             if (ExtensionConfigurationUtility::isUserInBlackList($this->user)) {
-                throw new UserInBlackListException('Black list is configured and user is in.', 1424825189);
+                $this->throwSecureException(
+                    UserInBlackListException::class,
+                    'Black list is configured and user is in.',
+                    1424825189
+                );
             }
         }
 
         if ($emailRequired) {
             if (strlen(trim($this->user['email'])) === 0) {
-                throw new UserHasNoEmailException('"' . $this->user['username'] . '" has no email defined.',
-                    1424708950);
+                $this->throwSecureException(
+                    UserHasNoEmailException::class,
+                    '"' . $this->user['username'] . '" has no email defined.',
+                    1424708950
+                );
             } elseif (!GeneralUtility::validEmail($this->user['email'])) {
-                throw new InvalidUserEmailException('"' . $this->user['username'] . '" has no valid email address.',
-                    1424710072);
+                $this->throwSecureException(
+                    InvalidUserEmailException::class,
+                    '"' . $this->user['username'] . '" has no valid email address.',
+                    1424710072
+                );
             }
         }
     }
@@ -387,8 +404,8 @@ class ResetTool
     {
         if (!empty($this->user)) {
             return strlen($this->user['tx_cdsrcbepwreset_resetHash']) > 0 &&
-                   $this->user['tx_cdsrcbepwreset_resetHash'] === $code &&
-                   $this->user['tx_cdsrcbepwreset_resetHashValidity'] >= $GLOBALS['EXEC_TIME'];
+                $this->user['tx_cdsrcbepwreset_resetHash'] === $code &&
+                $this->user['tx_cdsrcbepwreset_resetHashValidity'] >= $GLOBALS['EXEC_TIME'];
         }
 
         return false;
@@ -402,4 +419,18 @@ class ResetTool
         return $GLOBALS['LANG'];
     }
 
+    /**
+     * @param string $exception
+     * @param string $message
+     * @param int $code
+     */
+    protected function throwSecureException($exception, $message, $code)
+    {
+        if (ExtensionConfigurationUtility::acceptPlainMessageForException()) {
+            throw new $exception($message, $code);
+        } else {
+            LogUtility::writeError($message, $this->user['uid']);
+            throw new InvalidBackendUserException($message, $code);
+        }
+    }
 }

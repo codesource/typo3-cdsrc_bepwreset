@@ -14,6 +14,7 @@ namespace CDSRC\CdsrcBepwreset\Utility;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -26,6 +27,16 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
  */
 class LogUtility
 {
+
+    /**
+     * Type used by belog to display LOGIN in list
+     */
+    const TYPE_CODE = 255;
+
+    /**
+     * Action used by belog to display in list
+     */
+    const ACTION_CODE = 55;
 
     /**
      * Extention key
@@ -49,12 +60,7 @@ class LogUtility
      */
     public static function writeLog($message, $userId = 0)
     {
-        if (func_num_args() > 2) {
-            $params = func_get_args();
-            array_shift($params);
-            array_shift($params);
-            $message = vsprintf($message, $params);
-        }
+        $message = call_user_func_array(self::class . '::extractMessage', func_get_args());
         if (TYPO3_MODE === 'BE') {
             GeneralUtility::sysLog($message, self::$extKey, GeneralUtility::SYSLOG_SEVERITY_NOTICE);
         } else {
@@ -63,7 +69,33 @@ class LogUtility
         if ($GLOBALS['TYPO3_CONF_VARS']['SYS']['enable_DLOG']) {
             GeneralUtility::devLog($message, self::$extKey, GeneralUtility::SYSLOG_SEVERITY_NOTICE);
         }
-        self::writeToSysLog($message, $userId);
+        self::writeToSysLog($message, $userId, 0);
+    }
+
+    /**
+     * @param string $message
+     * @param int $userId
+     */
+    public static function writeError($message, $userId = 0)
+    {
+        $message = call_user_func_array(self::class . '::extractMessage', func_get_args());
+        self::writeToSysLog($message, $userId, 2);
+    }
+
+    /**
+     * @return string
+     */
+    protected static function extractMessage()
+    {
+        $params = func_get_args();
+        $message = array_shift($params);
+        if (count($params) > 1) {
+            array_shift($params);
+
+            return vsprintf($message, $params);
+        }
+
+        return $message;
     }
 
     /**
@@ -71,13 +103,11 @@ class LogUtility
      *
      * @param string $message
      * @param integer $userId
-     * @param integer $type
-     * @param integer $action
      * @param integer $error
      *
      * @return integer
      */
-    protected static function writeToSysLog($message, $userId = 0, $type = 255, $action = 0, $error = 0)
+    protected static function writeToSysLog($message, $userId = 0, $error = 0)
     {
         /** @var ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
@@ -85,8 +115,8 @@ class LogUtility
         $connection = $objectManager->get(ConnectionPool::class)->getConnectionForTable('sys_log');
         $connection->insert('sys_log', [
             'userid' => (int)$userId,
-            'type' => (int)$type,
-            'action' => (int)$action,
+            'type' => self::TYPE_CODE,
+            'action' => self::ACTION_CODE,
             'error' => (int)$error,
             'details_nr' => 1,
             'details' => $message,
