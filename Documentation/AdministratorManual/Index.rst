@@ -24,7 +24,7 @@ An administrator can force a backend user to reset his password at next login.
 * Save
 
 
-**Screenshot**
+**Screenshots**
 
 .. figure:: ../Images/AdministratorManual/ForcePasswordChangeOption.png
 	:width: 680px

@@ -39,7 +39,7 @@ class LogUtility
     const ACTION_CODE = 55;
 
     /**
-     * Extention key
+     * Extension key
      *
      * @var string
      */

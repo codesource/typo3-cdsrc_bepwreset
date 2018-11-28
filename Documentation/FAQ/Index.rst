@@ -36,6 +36,6 @@ What are the security in place?
 Why the user does not receive email reset?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* The user does not have valid adresse email.
+* The user does not have valid email address.
 * TYPO3 is not configured for sending emails.
   (Go to installation's tool and check email options.)

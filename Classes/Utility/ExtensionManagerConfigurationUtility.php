@@ -59,17 +59,13 @@ class ExtensionManagerConfigurationUtility
             $selectedGroups = explode(',', $selectedGroups);
         }
 
-        if (class_exists(ConnectionPool::class)) {
-            /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
-            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('be_groups');
-            $groups = $queryBuilder->select('uid', 'title')
-                                   ->from('be_groups')
-                                   ->orderBy('title')
-                                   ->execute()
-                                   ->fetchAll();
-        } else {
-            $groups = BackendUtility::getRecordsByField('be_groups', 'deleted', 0, '', '', 'title ASC');
-        }
+        /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('be_groups');
+        $groups = $queryBuilder->select('uid', 'title')
+                               ->from('be_groups')
+                               ->orderBy('title')
+                               ->execute()
+                               ->fetchAll();
 
         $id = 'cdsrc_bepwreset_' . self::$javascriptIdIndex;
         self::$javascriptIdIndex++;

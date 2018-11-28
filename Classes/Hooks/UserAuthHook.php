@@ -34,6 +34,8 @@ class UserAuthHook
      * Log off and redirect if password reset is required
      * @param array $params
      * @param BackendUserAuthentication $pObj
+     * 
+     * @throws \Exception
      */
     public function postUserLookUp($params, $pObj)
     {

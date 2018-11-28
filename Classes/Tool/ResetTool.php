@@ -50,7 +50,7 @@ class ResetTool
 {
 
     /**
-     * Extention key
+     * Extension key
      *
      * @var string
      */
@@ -135,7 +135,7 @@ class ResetTool
     }
 
     /**
-     * Set a new reset code to user and return datas
+     * Set a new reset code to user and return data
      *
      * @param string $username
      *
@@ -183,16 +183,16 @@ class ResetTool
      */
     public function resetPassword($username, $password, $passwordConfirmation, $code)
     {
-        $trimedPassword = trim($password);
+        $trimmedPassword = trim($password);
         $this->initUser($username, ExtensionConfigurationUtility::checkAreBypassedOnResetAtNextLogin(), false);
 
         if (!$this->isValidResetCode($code)) {
             throw new InvalidResetCodeException('"' . $code . '" is not valid.', 1424710407);
         }
-        if (strlen($trimedPassword) === 0) {
+        if (strlen($trimmedPassword) === 0) {
             throw new EmptyPasswordException('Password is empty.', 1424718754);
         }
-        if ($trimedPassword !== trim($passwordConfirmation)) {
+        if ($trimmedPassword !== trim($passwordConfirmation)) {
             throw new InvalidPasswordConfirmationException('Confirmation password is not valid.', 1424718822);
         }
 
@@ -200,7 +200,7 @@ class ResetTool
             $set = true;
             $is_in = '';
             $eval = GeneralUtility::makeInstance('SpoonerWeb\BeSecurePw\Evaluation\PasswordEvaluator');
-            $check = $eval->evaluateFieldValue($trimedPassword, $is_in, $set);
+            $check = $eval->evaluateFieldValue($trimmedPassword, $is_in, $set);
             if (strlen($check) === 0) {
                 throw new BeSecurePwException('Password is not enough strong.', 1424736449);
             }
@@ -209,7 +209,7 @@ class ResetTool
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cdsrc_bepwreset']['CDSRC\CdsrcBepwreset\Tool\ResetTool']['preResetPassword'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cdsrc_bepwreset']['CDSRC\CdsrcBepwreset\Tool\ResetTool']['preResetPassword'] as $reference) {
                 $hookParameters = [
-                    'password' => $trimedPassword,
+                    'password' => $trimmedPassword,
                 ];
                 GeneralUtility::callUserFunction($reference, $hookParameters, $this);
             }
@@ -221,7 +221,7 @@ class ResetTool
         $storeRec = array(
             'be_users' => array(
                 $this->user['uid'] => array(
-                    'password' => $trimedPassword,
+                    'password' => $trimmedPassword,
                     'tx_cdsrcbepwreset_resetHash' => '',
                     'tx_cdsrcbepwreset_resetHashValidity' => 0,
                     'tx_cdsrcbepwreset_resetAtNextLogin' => 0,
@@ -234,7 +234,7 @@ class ResetTool
         // This is so the user can actually update his user record.
         $GLOBALS['BE_USER']->user['admin'] = 1;
         $tce->start($storeRec, array(), $GLOBALS['BE_USER']);
-        // Desactivate history
+        // Deactivate history
         $tce->checkSimilar = false;
         // This is to make sure that the users record can be updated even if in another workspace. This is tolerated.
         $tce->bypassWorkspaceRestrictions = true;
@@ -311,11 +311,6 @@ class ResetTool
      *
      * @throws InvalidBackendUserException
      * @throws InvalidUsernameException
-     * @throws InvalidUserEmailException
-     * @throws PasswordResetPreventedForAdminException
-     * @throws UserHasNoEmailException
-     * @throws UserInBlackListException
-     * @throws UserNotInWhiteListException
      */
     protected function initUser($username, $bypassCheckOnResetAtNextLogin = true, $emailRequired = true)
     {
@@ -422,6 +417,8 @@ class ResetTool
      * @param string $exception
      * @param string $message
      * @param int $code
+     *
+     * @throws InvalidBackendUserException
      */
     protected function throwSecureException($exception, $message, $code)
     {

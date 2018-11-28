@@ -34,7 +34,7 @@ class SessionUtility
     protected static $sessionKey = 'cdsrc_bepwreset';
 
     /**
-     * Retrieve call datas from session
+     * Retrieve call data from session
      *
      * @return array
      */
@@ -43,14 +43,14 @@ class SessionUtility
         self::init();
         $data = $_SESSION[self::$sessionKey];
         if (!is_array($data)) {
-            $datas = array();
+            $data = array();
         }
 
         return $data;
     }
 
     /**
-     * Store call datas to session
+     * Store call data to session
      *
      * @param string $command
      * @param string $username
@@ -82,7 +82,7 @@ class SessionUtility
     }
 
     /**
-     * Store call datas to session and redirect to login form
+     * Store call data to session and redirect to login form
      *
      * @param string $command
      * @param string $username
@@ -108,7 +108,7 @@ class SessionUtility
     }
 
     /**
-     * Reset session datas
+     * Reset session data
      */
     public static function reset()
     {

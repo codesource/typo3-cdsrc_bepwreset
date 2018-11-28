@@ -41,7 +41,7 @@ class ExtensionConfigurationUtility
     protected static $usergroups = array();
 
     /**
-     * Can user reset theyr password from login form
+     * Can user reset their password from login form
      *
      * @return boolean
      */
@@ -170,22 +170,13 @@ class ExtensionConfigurationUtility
     protected static function setBackendGroups($groupIds, &$finalGroupIds)
     {
         if (is_array($groupIds) && count($groupIds) > 0) {
-            if (class_exists(ConnectionPool::class)) {
-                /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
-                $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('be_groups');
-                $groups = $queryBuilder->select('uid', 'subgroup')
-                                       ->from('be_groups')
-                                       ->where($queryBuilder->expr()->in('uid', $groupIds))
-                                       ->execute()
-                                       ->fetchAll();
-            } else {
-                $groups = BackendUtility::getRecordsByField(
-                    'be_groups',
-                    'deleted',
-                    0,
-                    ' AND uid IN(' . implode(',', $groupIds) . ')'
-                );
-            }
+            /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
+            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('be_groups');
+            $groups = $queryBuilder->select('uid', 'subgroup')
+                                   ->from('be_groups')
+                                   ->where($queryBuilder->expr()->in('uid', $groupIds))
+                                   ->execute()
+                                   ->fetchAll();
             $subGroupIds = array();
             if (is_array($groups)) {
                 foreach ($groups as $group) {

@@ -21,7 +21,7 @@ class MailStandaloneView extends StandaloneView
      */
     public function __construct(ContentObjectRenderer $contentObject = null)
     {
-        parent::__construct();
+        parent::__construct($contentObject);
         if(!$this->baseRenderingContext->getControllerContext()){
             $this->baseRenderingContext->setControllerContext($this->controllerContext);
         }
