@@ -2,6 +2,7 @@
   "name": "cdsrc/cdsrc-bepwreset",
   "type": "typo3-cms-extension",
   "description": "Allow backend user to reset his password from login form. Option can be specified to force Backend user to change his password at first login.",
+  "licence": "GPL-3.0-or-later",
   "authors": [
     {
       "name": "Matthias Toscanelli",
