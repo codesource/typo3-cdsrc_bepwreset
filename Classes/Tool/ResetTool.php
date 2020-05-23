@@ -33,6 +33,7 @@ use CDSRC\CdsrcBepwreset\Utility\ExtensionConfigurationUtility;
 use CDSRC\CdsrcBepwreset\Utility\HashUtility;
 use CDSRC\CdsrcBepwreset\Utility\LogUtility;
 use CDSRC\CdsrcBepwreset\View\MailStandaloneView;
+use Symfony\Component\Mime\Email;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Mail\MailMessage;
@@ -125,9 +126,14 @@ class ResetTool
         $mail
             ->setTo($this->user['email'])
             ->setFrom($from)
-            ->setSubject($subject)
-            ->setBody($bodyPlain, 'text/plain')
-            ->addPart($bodyHtml, 'text/html');
+            ->setSubject($subject);
+        if($mail instanceof Email){
+            $mail->text($bodyPlain)
+                ->html($bodyHtml);
+        }else{
+            $mail->setBody($bodyPlain, 'text/plain')
+                ->addPart($bodyHtml, 'text/html');
+        }
         $mail->send();
         if (!$mail->isSent()) {
             throw new EmailNotSentException('Email not sent.', 1424721934);
@@ -228,18 +234,20 @@ class ResetTool
                 ),
             ),
         );
+        // This is so the user can actually update his user record, maintainers and admin must be updated
+        $oldBackendUser = $this->initializeFakeBackendUser();
         // Make instance of TCE for storing the changes.
-        $tce = GeneralUtility::makeInstance(DataHandler::class);
-        $tce->stripslashes_values = 0;
-        // This is so the user can actually update his user record.
-        $GLOBALS['BE_USER']->user['admin'] = 1;
-        $tce->start($storeRec, array(), $GLOBALS['BE_USER']);
+        /** @var DataHandler $dataHandler */
+        $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
+        $dataHandler->start($storeRec, []);
         // Deactivate history
-        $tce->checkSimilar = false;
+        $dataHandler->checkSimilar = false;
+        $dataHandler->admin = true;
         // This is to make sure that the users record can be updated even if in another workspace. This is tolerated.
-        $tce->bypassWorkspaceRestrictions = true;
-        $tce->process_datamap();
-        unset($tce);
+        $dataHandler->bypassWorkspaceRestrictions = true;
+        $dataHandler->process_datamap();
+        unset($dataHandler);
+        $this->restoreBackendUser($oldBackendUser);
         LogUtility::writeLog(
             'Password has been reset for "%s (%s)" from %s',
             $this->user['uid'],
@@ -428,5 +436,28 @@ class ResetTool
             LogUtility::writeError($message, $this->user['uid']);
             throw new InvalidBackendUserException($message, $code);
         }
+    }
+
+    /**
+     * @return array|null
+     */
+    protected function initializeFakeBackendUser(){
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['systemMaintainers'][1590234312490] = 0;
+        $currentBackendUser = $GLOBALS['BE_USER']->user;
+        $GLOBALS['BE_USER']->user = [
+            'uid' => 0,
+            'admin' => 1,
+            'ses_backuserid' => 0,
+        ];
+        return $currentBackendUser;
+    }
+
+    /**
+     * @param array|null $currentBackendUser
+     */
+    protected function restoreBackendUser($currentBackendUser){
+        // Restore backend user
+        $GLOBALS['BE_USER']->user = $currentBackendUser;
+        unset($GLOBALS['TYPO3_CONF_VARS']['SYS']['systemMaintainers'][1590234312490]);
     }
 }

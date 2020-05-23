@@ -142,6 +142,7 @@ class UsernamePasswordLoginProvider extends BaseUsernamePasswordLoginProvider
                     $pageRenderer->loadRequireJsModule('TYPO3/CMS/CdsrcBepwreset/ResetPassword');
                     $view->assignMultiple([
                         'formType' => 'PasswordChangeForm',
+                        'referrerCheckEnabled' => 0,
                         'passwordResetHeader' => $this->command === 'force' ?
                             $this->getLanguageService()->getLL('labels.changePasswordAtFirstLogin') :
                             '',

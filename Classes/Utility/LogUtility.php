@@ -15,8 +15,11 @@ namespace CDSRC\CdsrcBepwreset\Utility;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Log\Logger;
+use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
@@ -46,6 +49,11 @@ class LogUtility
     protected static $extKey = 'cdsrc_bepwreset';
 
     /**
+     * @var Logger
+     */
+    protected static $logger;
+
+    /**
      * Writes log message to the system log.
      * If developer log is enabled, messages are also sent there.
      *
@@ -62,12 +70,12 @@ class LogUtility
     {
         $message = call_user_func_array(self::class . '::extractMessage', func_get_args());
         if (TYPO3_MODE === 'BE') {
-            GeneralUtility::sysLog($message, self::$extKey, GeneralUtility::SYSLOG_SEVERITY_NOTICE);
+            self::getLogger()->notice($message,['extension' => self::$extKey]);
         } else {
             $GLOBALS['TT']->setTSlogMessage($message);
         }
         if ($GLOBALS['TYPO3_CONF_VARS']['SYS']['enable_DLOG']) {
-            GeneralUtility::devLog($message, self::$extKey, GeneralUtility::SYSLOG_SEVERITY_NOTICE);
+            self::getLogger()->debug($message,['extension' => self::$extKey]);
         }
         self::writeToSysLog($message, $userId, 0);
     }
@@ -129,5 +137,18 @@ class LogUtility
         ]);
 
         return $connection->lastInsertId('sys_log');
+    }
+
+
+    /**
+     * @return Logger
+     */
+    protected static function getLogger()
+    {
+        if (self::$logger === null) {
+            self::$logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(static::class);
+        }
+
+        return self::$logger;
     }
 }

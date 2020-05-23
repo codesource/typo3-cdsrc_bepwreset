@@ -15,6 +15,7 @@ namespace CDSRC\CdsrcBepwreset\Utility;
  * The TYPO3 project - inspiring people to share!
  */
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -127,7 +128,11 @@ class ExtensionConfigurationUtility
     protected static function init()
     {
         if (empty(self::$extConf)) {
-            self::$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['cdsrc_bepwreset']);
+            if(class_exists(ExtensionConfiguration::class)){
+                self::$extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('cdsrc_bepwreset');
+            }else {
+                self::$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['cdsrc_bepwreset']);
+            }
         }
     }
 
