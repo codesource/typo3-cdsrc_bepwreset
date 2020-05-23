@@ -18,7 +18,7 @@
     }
   },
   "replace": {
-    "cdsrc_bepwreset": "self.version",
+    "cdsrc/cdsrc_bepwreset": "self.version",
     "typo3-ter/cdsrc_bepwreset": "self.version"
   }
 }
