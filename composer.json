@@ -9,6 +9,11 @@
       "email": "m.toscanelli@code-source.ch"
     }
   ],
+  "extra": {
+    "typo3/cms": {
+      "extension-key": "cdsrc_bepwreset"
+    }
+  },
   "require": {
     "typo3/cms-core": "~8.7.32||~9.5.17||~10.4.2"
   },
