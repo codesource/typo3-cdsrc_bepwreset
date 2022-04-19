@@ -20,7 +20,7 @@ use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use CDSRC\CdsrcBepwreset\Utility\LogUtility;
 use CDSRC\CdsrcBepwreset\Utility\SessionUtility;
-use TYPO3\CMS\Lang\LanguageService;
+use TYPO3\CMS\Core\Localization\LanguageService;
 
 /**
  * Hook user authentication to reset password if option is set.
