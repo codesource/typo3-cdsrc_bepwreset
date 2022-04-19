@@ -37,7 +37,7 @@
 				<source>Reset code sent</source>
 			</trans-unit>
 			<trans-unit id="ok.sendCodeMessage" xml:space="preserve">
-				<source>A confirmation has been send to your address email. Click on link to finish password reset.</source>
+				<source>An email has been sent to your email address. Please click the link in the message to finish your password reset. If you can't see the email, please check your spam folder.</source>
 			</trans-unit>
 			<trans-unit id="ok.resetPassword" xml:space="preserve">
 				<source>Your password has been changed</source>
