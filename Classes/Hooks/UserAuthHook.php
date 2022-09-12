@@ -34,14 +34,16 @@ class UserAuthHook
      * Log off and redirect if password reset is required
      * @param array $params
      * @param BackendUserAuthentication $pObj
-     * 
+     *
      * @throws \Exception
      */
     public function postUserLookUp($params, $pObj)
     {
         if ($pObj instanceof BackendUserAuthentication) {
             if (!empty($pObj->user)) {
-                if (intval($pObj->user['tx_cdsrcbepwreset_resetAtNextLogin']) === 1) {
+                if (intval($pObj->user['tx_cdsrcbepwreset_resetAtNextLogin']) === 1
+                    && (int)($pObj->user['ses_backuserid'] ?? 0) <= 0
+                ) {
                     try {
                         $user = $pObj->user;
                         /** @var ResetTool $resetTool */
